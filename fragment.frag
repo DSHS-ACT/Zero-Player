@@ -5,9 +5,15 @@ out vec4 color;
 
 void drawLines(vec2 coordinate);
 
+uniform sampler2D textures;
+
 void main() {
     vec2 coord = vec2(gl_FragCoord.x, gl_FragCoord.y);
-    drawLines(coord);
+    vec2 world_coord = coord / 120;
+    world_coord = vec2(floor(world_coord.x), floor(world_coord.y));
+    vec2 texture_coord = vec2(mod(coord.x, 120), mod(coord.y, 120));
+    color = texture(textures, texture_coord);
+    //drawLines(coord);
 }
 
 void drawLines(vec2 coordinate){
@@ -17,5 +23,5 @@ void drawLines(vec2 coordinate){
         color = vec4(1, 1, 1, 1);
     }else if (yMod < width || (120 - width) < yMod) {
         color = vec4(1, 1, 1, 1);
-    }else color = vec4(0, 0, 0, 0);
+    }
 }
