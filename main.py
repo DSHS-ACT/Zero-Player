@@ -5,6 +5,7 @@ from OpenGL.GL import *
 
 import game
 import keyhandler
+from texture import Texture
 
 window = None
 width = 3
@@ -12,20 +13,20 @@ width = 3
 texture_count = 0
 
 
-def register_images():
-    global texture_count
-    if texture_count >= 32:
-        raise OverflowError("최대 텍스쳐 갯수에 도달했습니다! (atlas 안써...)")
-    img = imageio.v2.imread("1.png")
-    texture_id = glGenTextures(1)
-    glActiveTexture(GL_TEXTURE0 + texture_count)
-    glBindTexture(GL_TEXTURE_2D, texture_id)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 120, 120, 0, GL_RGB, GL_UNSIGNED_BYTE, img)
-    texture_count += 1
+# def register_images():
+#     global texture_count
+#     if texture_count >= 32:
+#         raise OverflowError("최대 텍스쳐 갯수에 도달했습니다! (atlas 안써...)")
+#     img = imageio.v2.imread("1.png")
+#     texture_id = glGenTextures(1)
+#     glActiveTexture(GL_TEXTURE0 + texture_count)
+#     glBindTexture(GL_TEXTURE_2D, texture_id)
+#     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
+#     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
+#     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR)
+#     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+#     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 120, 120, 0, GL_RGB, GL_UNSIGNED_BYTE, img)
+#     texture_count += 1
 
 
 def init_window():
@@ -80,7 +81,7 @@ def init_window():
         print("쉐이더 프로그램 링크 오류")
         raise Exception(program_log)
 
-    register_images()
+    # register_images()
 
     vao = glGenVertexArrays(1)
     glBindVertexArray(vao)
@@ -102,6 +103,11 @@ def init_window():
     glUseProgram(shader_program)
     map_uniform_location = glGetUniformLocation(shader_program, "map")
     width_uniform_location = glGetUniformLocation(shader_program, "width")
+    texture_uniform_location = glGetUniformLocation(shader_program, "textures")
+
+    texture = Texture("1.png")
+    texture.bind(0)
+    glUniform1i(texture_uniform_location, 0)
 
     while not glfw.window_should_close(window):
         glClear(GL_COLOR_BUFFER_BIT)

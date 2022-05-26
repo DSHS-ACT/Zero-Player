@@ -8,12 +8,12 @@ void drawLines(vec2 coordinate);
 uniform sampler2D textures;
 
 void main() {
-    vec2 coord = vec2(gl_FragCoord.x, gl_FragCoord.y);
+    vec2 coord = vec2(gl_FragCoord.x, gl_FragCoord.y) * 10;
     vec2 world_coord = coord / 120;
-    world_coord = vec2(floor(world_coord.x), floor(world_coord.y));
-    vec2 texture_coord = vec2(mod(coord.x, 120), mod(coord.y, 120));
+    world_coord = floor(world_coord);
+    vec2 texture_coord = mod(coord, 120);
     color = texture(textures, texture_coord);
-    //drawLines(coord);
+    drawLines(coord);
 }
 
 void drawLines(vec2 coordinate){
