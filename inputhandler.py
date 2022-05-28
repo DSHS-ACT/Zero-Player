@@ -1,8 +1,7 @@
 from math import floor
-
 import glfw
-import main
 import game
+from global_variables import *
 
 
 def on_key(window, key: int, scancode: int, action: int, mods: int):
@@ -11,10 +10,10 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
         if key == glfw.KEY_ESCAPE:
             glfw.set_window_should_close(window, True)
         if key == glfw.KEY_UP:
-            main.width += 0.5
+            set_width(get_width() + 0.5)
         if key == glfw.KEY_DOWN:
-            if main.width >= 1:
-                main.width -= 0.5
+            if get_width() >= 1:
+                set_width(get_width() - 0.5)
 
 
 def on_mouse(window, button: int, action: int, mods: int):
@@ -30,6 +29,5 @@ def on_mouse(window, button: int, action: int, mods: int):
         print("위치: (" + str(x) + ", " + str(flipped_y) + ")")
         print("타일: (" + str(world_x) + ", " + str(world_y) + ")")
         game.world[world_x][world_y] += 1
-        game.world[world_x][world_y] %= 5
-    print("월드: [" + str(game.world[0][0]) + " " + str(game.world[1][0]) + " " + str(game.world[2][0]))
+        game.world[world_x][world_y] %= len(created)
 

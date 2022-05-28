@@ -11,11 +11,10 @@ from texture import Texture
 from vertex_array import VertexArray
 from vertex_buffer import VertexBuffer
 from vertex_buffer_layout import VertexBufferLayout
+from global_variables import *
 
 window = None
-width = 3.0
 
-created = []
 def prepare_textuers(images):
     for image in images:
         created.append(Texture(image))
@@ -29,7 +28,6 @@ def init_window():
     glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 3)
     glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
     global window
-    global width
     window = glfw.create_window(1920, 1080, "Zero Player Game", glfw.get_primary_monitor(), None)
     if window is None:
         print("창 생성에 실패했습니다!")
@@ -79,7 +77,7 @@ def init_window():
         renderer.clear()
 
         shader.bind()
-        shader.set_uniform1f("width", width)
+        shader.set_uniform1f("width", get_width())
         shader.set_uniform1iv("world", 16 * 9, game.get_gpu_world())
 
         renderer.draw(vertex_array, index_buffer, shader)
@@ -93,13 +91,6 @@ def init_window():
 
 def main():
     init_window()
-
-def set_width(w):
-    global width
-    width = w
-
-def get_width():
-    return width
 
 
 if __name__ == '__main__':
