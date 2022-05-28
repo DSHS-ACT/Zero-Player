@@ -84,6 +84,9 @@ def init_window():
 
         glfw.swap_buffers(window)
         glfw.poll_events()
+        set_frame_count(get_frame_count() + 1)
+        if get_frame_count() % 60 == 0:
+            game.tick()
 
     glfw.terminate()
     return
