@@ -91,6 +91,10 @@ class Shader:
         location = self.get_uniform_location(uniform_name)
         glUniform1fv(location, size, values)
 
+    def set_uniform1iv(self, uniform_name: str, size: int, values):
+        location = self.get_uniform_location(uniform_name)
+        glUniform1iv(location, size, values)
+
     def set_uniform1i(self, uniform_name: str, value: int):
         location = self.get_uniform_location(uniform_name)
         glUniform1i(location, value)

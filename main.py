@@ -3,7 +3,7 @@ import numpy as np
 from OpenGL.GL import *
 
 import game
-import keyhandler
+import inputhandler
 from index_buffer import IndexBuffer
 from renderer import Renderer
 from shader import Shader
@@ -13,7 +13,7 @@ from vertex_buffer import VertexBuffer
 from vertex_buffer_layout import VertexBufferLayout
 
 window = None
-width = 3
+width = 3.0
 
 def init_window():
     glfw.init()
@@ -29,7 +29,8 @@ def init_window():
         return
 
     glfw.make_context_current(window)
-    glfw.set_key_callback(window, keyhandler.on_key)
+    glfw.set_key_callback(window, inputhandler.on_key)
+    glfw.set_mouse_button_callback(window, inputhandler.on_mouse)
 
     positions = np.array([
         -1.0, -1.0, 0.0, 0.0,
@@ -55,9 +56,19 @@ def init_window():
     shader = Shader("vertex.vert", "fragment.frag")
     shader.bind()
 
-    texture = Texture("1.png")
-    texture.bind()
-    shader.set_uniform1i("u_Texture", 0)
+    texture0 = Texture("0.png")
+    texture1 = Texture("1.png")
+    texture2 = Texture("2.png")
+    texture3 = Texture("3.png")
+    texture4 = Texture("4.png")
+
+    texture0.bind(0)
+    texture1.bind(1)
+    texture2.bind(2)
+    texture3.bind(3)
+    texture4.bind(4)
+
+    shader.set_uniform1iv("tiles", 5, np.array([0, 1, 2, 3, 4], dtype=np.int32))
 
     vertex_array.unbind()
     vertex_buffer.unbind()
@@ -70,7 +81,8 @@ def init_window():
         renderer.clear()
 
         shader.bind()
-        shader.set_uniform1f("u_Width", width)
+        shader.set_uniform1f("width", width)
+        shader.set_uniform1iv("world", 16 * 9, game.get_gpu_world())
 
         renderer.draw(vertex_array, index_buffer, shader)
 
@@ -83,6 +95,13 @@ def init_window():
 
 def main():
     init_window()
+
+def set_width(w):
+    global width
+    width = w
+
+def get_width():
+    return width
 
 
 if __name__ == '__main__':
