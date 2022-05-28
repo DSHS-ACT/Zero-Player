@@ -1,11 +1,11 @@
 #version 330 core
 layout (location = 0) in vec2 position;
-//layout (location = 1) in vec2 texture_coord;
+layout (location = 1) in vec2 texCoord;
 
-out vec2 fragment_texture_coord;
+out vec2 frag_texCoord;
 
 void main()
 {
     gl_Position = vec4(position.x, position.y, 0, 1.0);
-    //fragment_texture_coord = texture_coord;
+    frag_texCoord = texCoord;
 }

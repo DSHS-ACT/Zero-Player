@@ -2,7 +2,7 @@ from OpenGL.GL import *
 
 
 class VertexBuffer:
-    def __init__(self, data, size):
+    def __init__(self, data, size: int):
         self.id = glGenBuffers(1)
         glBindBuffer(GL_ARRAY_BUFFER, self.id)
         glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW)
