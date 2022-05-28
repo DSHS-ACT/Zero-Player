@@ -13,7 +13,10 @@ void main() {
     vec2 y_flipped = vec2(coord.x, 1080 - coord.y);
     vec2 world_position = vec2(floor(y_flipped.x / 120), floor(y_flipped.y / 120));
     int tile_index = int(floor(world_position.y * 16)) + int(floor(world_position.x));
-    color = texture(tiles[world[tile_index]], frag_texCoord);
+
+    vec2 mapped_texCoord = vec2(frag_texCoord.x * 16, frag_texCoord.y * 9);
+
+    color = texture(tiles[world[tile_index]], mapped_texCoord);
     drawLines(coord);
 }
 

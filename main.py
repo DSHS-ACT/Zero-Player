@@ -15,6 +15,14 @@ from vertex_buffer_layout import VertexBufferLayout
 window = None
 width = 3.0
 
+created = []
+def prepare_textuers(images):
+    for image in images:
+        created.append(Texture(image))
+    for index, texture in enumerate(created):
+        print("index:" + str(index))
+        texture.bind(index)
+
 def init_window():
     glfw.init()
     glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 3)
@@ -56,17 +64,7 @@ def init_window():
     shader = Shader("vertex.vert", "fragment.frag")
     shader.bind()
 
-    texture0 = Texture("0.png")
-    texture1 = Texture("1.png")
-    texture2 = Texture("2.png")
-    texture3 = Texture("3.png")
-    texture4 = Texture("4.png")
-
-    texture0.bind(0)
-    texture1.bind(1)
-    texture2.bind(2)
-    texture3.bind(3)
-    texture4.bind(4)
+    prepare_textuers(game.texture_list)
 
     shader.set_uniform1iv("tiles", 5, np.array([0, 1, 2, 3, 4], dtype=np.int32))
 
