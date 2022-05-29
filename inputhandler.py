@@ -21,7 +21,7 @@ def on_mouse(window, button: int, action: int, mods: int):
     is_press = action == glfw.PRESS
     x, y = glfw.get_cursor_pos(window)
 
-    flipped_y = y
+    flipped_y = y # y 좌표를 위아래로 뒤집음. 그렇지 않으면 월드 좌표와 맞지 않음.
 
     world_x = int(floor(x / 120))
     world_y = int(floor(flipped_y / 120))
