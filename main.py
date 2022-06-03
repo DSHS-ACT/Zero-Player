@@ -3,6 +3,7 @@ import numpy as np
 from OpenGL.GL import *
 
 import game
+import global_variables
 import inputhandler
 from index_buffer import IndexBuffer
 from renderer import Renderer
@@ -15,12 +16,13 @@ from global_variables import *
 
 window = None
 
+
 def prepare_textuers(images):
     for image in images:
-        created.append(Texture(image))
-    for index, texture in enumerate(created):
-        print("index:" + str(index))
+        registered_textures.append(Texture(image))
+    for index, texture in enumerate(registered_textures):
         texture.bind(index)
+
 
 def init_window():
     glfw.init()
@@ -64,7 +66,9 @@ def init_window():
 
     prepare_textuers(game.texture_list)
 
-    shader.set_uniform1iv("tiles", 5, np.array([0, 1, 2, 3, 4], dtype=np.int32))
+    shader.set_uniform1iv("tiles", len(global_variables.registered_textures),
+                          np.array(range(0, len(global_variables.registered_textures)), dtype=np.int32)
+                          )
 
     vertex_array.unbind()
     vertex_buffer.unbind()
@@ -72,6 +76,8 @@ def init_window():
     shader.unbind()
 
     renderer = Renderer()
+
+    print("최대 텍스쳐 갯수:", glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS))
 
     while not glfw.window_should_close(window):
         renderer.clear()
@@ -85,10 +91,12 @@ def init_window():
         glfw.swap_buffers(window)
         glfw.poll_events()
         set_frame_count(get_frame_count() + 1)
-        if get_frame_count() % 60 == 0:
+        if get_frame_count() % (60 / get_game_speed()) == 0:
             game.tick()
 
     glfw.terminate()
+    for texture in registered_textures:
+        texture.delete()
     return
 
 

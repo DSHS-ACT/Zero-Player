@@ -8,6 +8,11 @@ uniform int world[144];
 
 void drawLines(vec2 coordinate);
 
+int UP = 0;
+int RIGHT = 1;
+int DOWN = 2;
+int LEFT = 3;
+
 void main() {
     vec2 coord = vec2(gl_FragCoord.x, gl_FragCoord.y);
     vec2 y_flipped = vec2(coord.x, 1080 - coord.y);
@@ -16,7 +21,21 @@ void main() {
 
     vec2 mapped_texCoord = vec2(frag_texCoord.x * 16, frag_texCoord.y * 9);
 
-    color = texture(tiles[world[tile_index]], mapped_texCoord);
+    int texture_number = 31 & world[tile_index];
+    int direction = 3 & (world[tile_index] >> 5);
+
+    vec2 transformed_coord;
+    if (direction == UP) {
+        transformed_coord = mapped_texCoord;
+    } else if (direction == RIGHT) {
+        transformed_coord = vec2(mapped_texCoord.y, -mapped_texCoord.x);
+    } else if (direction == DOWN) {
+        transformed_coord = vec2(mapped_texCoord.x, -mapped_texCoord.y);
+    } else if (direction == LEFT) {
+        transformed_coord = vec2(-mapped_texCoord.y, mapped_texCoord.x);
+    }
+
+    color = texture(tiles[texture_number], transformed_coord);
     drawLines(coord);
 }
 

@@ -1,15 +1,51 @@
 import numpy as np
 
-world = np.zeros((16, 9), dtype=np.int32)
+import global_variables
+import tiles
+from texture import Texture
 
-texture_list = ["0.png", "1.png", "2.png", "3.png", "4.png"]
+world_tiles = np.empty((16, 9), dtype=Texture)
+
+texture_list = ["0.png", "1.png", "2.png", "3.png", "4.png", "5.png"]
+
 
 # TODO 화살표 방향으로 이동하는 타일, 키보드 방향키를 눌러 방향을 고른다
 # TODO 무작위로 움직이는 타일
 # TODO 배속시키는 키보드 키
 
+def clamp(num, min_value, max_value):
+    return max(min(num, max_value), min_value)
+
+
 def get_gpu_world():
-    return world.flatten(order="F")
+    # GPU 에 보낼 숫자 버퍼 미리 마련
+    processor = np.vectorize(tiles.Tile.to_int)
+    to_send = processor(world_tiles)
+
+    return to_send.flatten(order="F")
+
 
 def tick():
-    print("tick")
+    if not global_variables.is_ticking():
+        return
+    ticked = []
+    for x in range(0, 16):
+        for y in range(0, 9):
+            tile = world_tiles[x][y]
+            if tile is None:
+                continue
+            if tile in ticked:
+                continue
+
+            tile.tick()
+            ticked.append(tile)
+            print("방향:", tile.direction)
+            next_position = (clamp(x + tile.velocity[0], 0, 15), clamp(y + tile.velocity[1], 0, 8))
+            is_different = (x, y) != next_position
+            if world_tiles[next_position[0]][next_position[1]] is None:
+                world_tiles[next_position[0]][next_position[1]] = tile
+                world_tiles[x][y] = None
+            else:
+                if is_different:
+                    collided = world_tiles[next_position[0]][next_position[1]]
+                    tile.pushing(collided)
