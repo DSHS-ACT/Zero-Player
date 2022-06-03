@@ -6,10 +6,9 @@ import numpy as np
 class Texture:
     def __init__(self, path: str):
         img = np.flip(iio.imread(path), 0)
-
-        print("이미지 위치: " + path + " 크기: " + str(img.shape))
-
         self.id = glGenTextures(1)
+
+        print("이미지 위치: " + path + " 크기: " + str(img.shape) + " 아이디: " + str(self.id))
         glBindTexture(GL_TEXTURE_2D, self.id)
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
@@ -20,11 +19,12 @@ class Texture:
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, img.shape[0], img.shape[1], 0, GL_RGBA, GL_UNSIGNED_BYTE, img)
         self.unbind()
 
-    def __del__(self):
+    def delete(self):
         glDeleteTextures(1, self.id)
 
     def bind(self, slot: int = 0):
         assert slot < 32
+        print("텍스쳐", slot, "번 바인드됨!")
         glActiveTexture(GL_TEXTURE0 + slot)
         glBindTexture(GL_TEXTURE_2D, self.id)
 
