@@ -17,7 +17,6 @@ class VertexBufferElement:
             return 1
         else:
             assert False
-            return 0
 
 
 class VertexBufferLayout:

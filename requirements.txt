@@ -2,3 +2,4 @@ PyOpenGL
 glfw
 numpy
 imageio
+imgui[glfw]

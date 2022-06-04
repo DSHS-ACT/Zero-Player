@@ -1,5 +1,4 @@
 import random
-
 import enums
 from texture import Texture
 import uuid
@@ -10,11 +9,11 @@ def direction_to_velocity(direction: int):
     if direction == enums.UP:
         return 0, -1
     elif direction == enums.RIGHT:
-        return -1, 0
+        return 1, 0
     elif direction == enums.DOWN:
         return 0, 1
     elif direction == enums.LEFT:
-        return 1, 0
+        return -1, 0
 
 
 class Tile:
@@ -43,9 +42,9 @@ class Tile:
 
     def to_int(self):
         if self is None:
-            return 0
+            return Texture.EMPTY.slot
         else:
-            element = self.texture.id - 1
+            element = self.texture.slot
             element += self.direction << 5
             return element
 

@@ -1,12 +1,10 @@
 import numpy as np
 
-import global_variables
+from main import configuration
 import tiles
 from texture import Texture
 
 world_tiles = np.empty((16, 9), dtype=Texture)
-
-texture_list = ["0.png", "1.png", "2.png", "3.png", "4.png", "5.png"]
 
 
 # TODO 화살표 방향으로 이동하는 타일, 키보드 방향키를 눌러 방향을 고른다
@@ -26,7 +24,7 @@ def get_gpu_world():
 
 
 def tick():
-    if not global_variables.is_ticking():
+    if not configuration.ticking:
         return
     ticked = []
     for x in range(0, 16):
@@ -40,7 +38,11 @@ def tick():
             tile.tick()
             ticked.append(tile)
             print("방향:", tile.direction)
-            next_position = (clamp(x + tile.velocity[0], 0, 15), clamp(y + tile.velocity[1], 0, 8))
+            if configuration.is_wrapping:
+                next_position = (x + tile.velocity[0]) % 16, (y + tile.velocity[1]) % 9
+            else:
+                next_position = (clamp(x + tile.velocity[0], 0, 15), clamp(y + tile.velocity[1], 0, 8))
+
             is_different = (x, y) != next_position
             if world_tiles[next_position[0]][next_position[1]] is None:
                 world_tiles[next_position[0]][next_position[1]] = tile

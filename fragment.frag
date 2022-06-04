@@ -28,11 +28,11 @@ void main() {
     if (direction == UP) {
         transformed_coord = mapped_texCoord;
     } else if (direction == RIGHT) {
-        transformed_coord = vec2(mapped_texCoord.y, -mapped_texCoord.x);
+        transformed_coord = vec2(-mapped_texCoord.y, mapped_texCoord.x);
     } else if (direction == DOWN) {
         transformed_coord = vec2(mapped_texCoord.x, -mapped_texCoord.y);
     } else if (direction == LEFT) {
-        transformed_coord = vec2(-mapped_texCoord.y, mapped_texCoord.x);
+        transformed_coord = vec2(mapped_texCoord.y, -mapped_texCoord.x);
     }
 
     color = texture(tiles[texture_number], transformed_coord);
