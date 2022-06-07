@@ -77,12 +77,12 @@ def init_window():
     impl = GlfwRenderer(window, False)
 
     Texture.create_textures()
-    bind_textures(Texture.texture_list())
+    bind_textures(Texture.TEXTURE_LIST)
 
     # GPU 에 보내지는 유니폼은 슬롯 번호들의 배열
     shader.set_uniform1iv(
-        "tiles", len(Texture.texture_list()) + 8,
-        list(range(0, len(Texture.texture_list()) + 8))
+        "tiles", len(Texture.TEXTURE_LIST) + 8,
+        list(range(0, len(Texture.TEXTURE_LIST) + 8))
     )
 
     vertex_array.unbind()
@@ -123,7 +123,7 @@ def init_window():
     impl.shutdown()
     glfw.terminate()
 
-    for texture in Texture.texture_list():
+    for texture in Texture.TEXTURE_LIST:
         texture.delete()
     return
 
@@ -148,7 +148,7 @@ def debug_screen():
         imgui.text("월드 테두리 이어 붙이지 않음")
 
     imgui.image(1, 120, 120, (0, 1), (1, 0))
-    for texture in Texture.texture_list():
+    for texture in Texture.TEXTURE_LIST:
         imgui.image(texture.id, 120, 120, (0, 1), (1, 0))
 
     imgui.end()

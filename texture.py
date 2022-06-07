@@ -7,6 +7,7 @@ class Texture:
     EMPTY = None
     ARROW = None
     QUESTION = None
+    TEXTURE_LIST = None
 
     def __init__(self, path: str):
         img = np.flip(iio.imread(path), 0)
@@ -44,7 +45,4 @@ class Texture:
         Texture.EMPTY = Texture("empty.png")
         Texture.ARROW = Texture("1.png")
         Texture.QUESTION = Texture("2.png")
-
-    @staticmethod
-    def texture_list():
-        return [Texture.EMPTY, Texture.ARROW, Texture.QUESTION]
+        Texture.TEXTURE_LIST = [Texture.EMPTY, Texture.ARROW, Texture.QUESTION]
