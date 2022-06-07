@@ -75,7 +75,6 @@ def init_window():
     io.fonts.get_tex_data_as_rgba32()
 
     impl = GlfwRenderer(window, False)
-    impl.refresh_font_texture()
 
     Texture.create_textures()
     bind_textures(Texture.texture_list())
@@ -111,18 +110,9 @@ def init_window():
             game.tick()
 
         if configuration.show_debug_ui:
-            imgui.begin("제로 플레이어 게임 디버그 UI")
-            imgui.text("게임 속도: " + str(configuration.game_speed) + " x")
-            if configuration.is_wrapping:
-                imgui.text("월드 테두리 이어 붙임")
-            else:
-                imgui.text("월드 테두리 이어 붙이지 않음")
-
-            imgui.image(1, 120, 120, (0, 1), (1, 0))
-            for texture in Texture.texture_list():
-                imgui.image(texture.id, 120, 120, (0, 1), (1, 0))
-
-            imgui.end()
+            debug_screen()
+        if configuration.show_help:
+            show_help()
 
         imgui.render()
         impl.render(imgui.get_draw_data())
@@ -130,13 +120,38 @@ def init_window():
         glfw.swap_buffers(window)
         glfw.poll_events()
 
-    # impl.shutdown()
+    impl.shutdown()
     glfw.terminate()
 
     for texture in Texture.texture_list():
         texture.delete()
     return
 
+def show_help():
+    imgui.begin("제로 플레이어 게임 조작키")
+    imgui.text("월드 테두리 이어 붙이기: U")
+    imgui.text("디버그 GUI: -")
+    imgui.text("이 창 띄우기/닫기: ?")
+    imgui.text("격자 선 굵기 조절: 마우스 휠")
+    imgui.text("게임 종료: ESC")
+    imgui.text("게임 속도 가속: K")
+    imgui.text("게임 속도 감속: L")
+    imgui.text("시뮬레이션 시작: SPACE")
+    imgui.end()
+
+def debug_screen():
+    imgui.begin("제로 플레이어 게임 디버그 UI")
+    imgui.text("게임 속도: " + str(configuration.game_speed) + " x")
+    if configuration.is_wrapping:
+        imgui.text("월드 테두리 이어 붙임")
+    else:
+        imgui.text("월드 테두리 이어 붙이지 않음")
+
+    imgui.image(1, 120, 120, (0, 1), (1, 0))
+    for texture in Texture.texture_list():
+        imgui.image(texture.id, 120, 120, (0, 1), (1, 0))
+
+    imgui.end()
 
 def main():
     print("PID:", os.getpid())

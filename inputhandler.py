@@ -12,10 +12,10 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
     if is_press:
         if key == glfw.KEY_ESCAPE:
             glfw.set_window_should_close(window, True)
-        if key == glfw.KEY_K:
+        if key == glfw.KEY_L:
             if configuration.game_speed < 2.5:
                 configuration.game_speed += 0.5
-        if key == glfw.KEY_L:
+        if key == glfw.KEY_K:
             if configuration.game_speed > 0.5:
                 configuration.game_speed -= 0.5
         if key == glfw.KEY_SPACE:
@@ -24,9 +24,18 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
             configuration.is_wrapping = not configuration.is_wrapping
         if key == glfw.KEY_MINUS:
             configuration.show_debug_ui = not configuration.show_debug_ui
+        if key == glfw.KEY_SLASH:
+            configuration.show_help = not configuration.show_help
 
 
 def on_mouse(window, button: int, action: int, mods: int):
+    # 게임 실행중에는 마우스 입력 무시
+    if configuration.ticking:
+        return
+
+    # GUI 표시중에는 마우스 입력 무시
+    if configuration.show_help or configuration.show_debug_ui:
+        return
     is_left = button == glfw.MOUSE_BUTTON_LEFT
     is_press = action == glfw.PRESS
 
@@ -51,11 +60,11 @@ def on_mouse(window, button: int, action: int, mods: int):
             elif glfw.PRESS == glfw.get_key(window, glfw.KEY_LEFT):
                 direction = enums.LEFT
             else:
-                # 방향키를 누루고 있지 않을시, 방향을 없음으로 함
-                direction = None
+                # 방향키를 누루고 있지 않을시, 위로 함
+                direction = enums.UP
 
             clicked_tile = game.world_tiles[world_x][world_y]
-            if direction is not None and (clicked_tile is None or isinstance(clicked_tile, tiles.Arrow)):
+            if clicked_tile is None or isinstance(clicked_tile, tiles.Arrow):
                 arrow = tiles.Arrow(Texture.ARROW)
                 arrow.direction = direction
                 game.world_tiles[world_x][world_y] = arrow

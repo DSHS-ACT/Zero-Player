@@ -6,6 +6,7 @@ class Global:
         self.ticking = False
         self.is_wrapping = False
         self.show_debug_ui = False
+        self.show_help = False
 
 
 configuration = Global()
