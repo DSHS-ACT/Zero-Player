@@ -35,7 +35,39 @@ void main() {
         transformed_coord = vec2(mapped_texCoord.y, -mapped_texCoord.x);
     }
 
-    color = texture(tiles[texture_number], transformed_coord);
+    if (texture_number == 0) color = texture(tiles[0], transformed_coord);
+    if (texture_number == 1) color = texture(tiles[1], transformed_coord);
+    if (texture_number == 2) color = texture(tiles[2], transformed_coord);
+    if (texture_number == 3) color = texture(tiles[3], transformed_coord);
+    if (texture_number == 4) color = texture(tiles[4], transformed_coord);
+    if (texture_number == 5) color = texture(tiles[5], transformed_coord);
+    if (texture_number == 6) color = texture(tiles[6], transformed_coord);
+    if (texture_number == 7) color = texture(tiles[7], transformed_coord);
+    if (texture_number == 8) color = texture(tiles[8], transformed_coord);
+    if (texture_number == 9) color = texture(tiles[9], transformed_coord);
+    if (texture_number == 10) color = texture(tiles[10], transformed_coord);
+    if (texture_number == 11) color = texture(tiles[11], transformed_coord);
+    if (texture_number == 12) color = texture(tiles[12], transformed_coord);
+    if (texture_number == 13) color = texture(tiles[13], transformed_coord);
+    if (texture_number == 14) color = texture(tiles[14], transformed_coord);
+    if (texture_number == 15) color = texture(tiles[15], transformed_coord);
+    if (texture_number == 16) color = texture(tiles[16], transformed_coord);
+    if (texture_number == 17) color = texture(tiles[17], transformed_coord);
+    if (texture_number == 18) color = texture(tiles[18], transformed_coord);
+    if (texture_number == 19) color = texture(tiles[19], transformed_coord);
+    if (texture_number == 20) color = texture(tiles[20], transformed_coord);
+    if (texture_number == 21) color = texture(tiles[21], transformed_coord);
+    if (texture_number == 22) color = texture(tiles[22], transformed_coord);
+    if (texture_number == 23) color = texture(tiles[23], transformed_coord);
+    if (texture_number == 24) color = texture(tiles[24], transformed_coord);
+    if (texture_number == 25) color = texture(tiles[25], transformed_coord);
+    if (texture_number == 26) color = texture(tiles[26], transformed_coord);
+    if (texture_number == 27) color = texture(tiles[27], transformed_coord);
+    if (texture_number == 28) color = texture(tiles[28], transformed_coord);
+    if (texture_number == 29) color = texture(tiles[29], transformed_coord);
+    if (texture_number == 30) color = texture(tiles[30], transformed_coord);
+    if (texture_number == 31) color = texture(tiles[31], transformed_coord);
+
     drawLines(coord);
 }
 
