@@ -101,7 +101,7 @@ def init_window():
 
         shader.bind()
         shader.set_uniform1f("width", configuration.width)
-        shader.set_uniform1iv("world", 16 * 9, game.get_gpu_world())
+        shader.set_uniform1iv("world", 32 * 18, game.get_gpu_world())
 
         renderer.draw(vertex_array, index_buffer, shader)
 
@@ -147,9 +147,9 @@ def debug_screen():
     else:
         imgui.text("월드 테두리 이어 붙이지 않음")
 
-    imgui.image(1, 120, 120, (0, 1), (1, 0))
+    imgui.image(1, 60, 60, (0, 1), (1, 0))
     for texture in Texture.TEXTURE_LIST:
-        imgui.image(texture.id, 120, 120, (0, 1), (1, 0))
+        imgui.image(texture.id, 60, 60, (0, 1), (1, 0))
 
     imgui.end()
 

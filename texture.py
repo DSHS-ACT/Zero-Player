@@ -2,11 +2,15 @@ import imageio.v3 as iio
 from OpenGL.GL import *
 import numpy as np
 
-
+# ZPG 의 텍스처를 책임지는 클래스
+# 새로운 텍스쳐를 추가하고 싶으면, QUESTION = None 과 같이
 class Texture:
+    # 현재 게임에서 사용하는 텍스쳐들
     EMPTY = None
     ARROW = None
     QUESTION = None
+
+    # 현재 게임에서 사용하는 텍스쳐들이 들어있는 리스트, create_texture 정적 함수가 호출되면 초기화된다
     TEXTURE_LIST = None
 
     def __init__(self, path: str):
@@ -40,6 +44,7 @@ class Texture:
         glBindTexture(GL_TEXTURE_2D, 0)
         self.slot = -1
 
+    # 클래스를 등록하고 텍스처 리스트를 구성하는 함수
     @staticmethod
     def create_textures():
         Texture.EMPTY = Texture("empty.png")
