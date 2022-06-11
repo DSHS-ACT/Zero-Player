@@ -3,6 +3,7 @@ from texture import Texture
 import uuid
 import game
 
+
 # 0, 1, 2, 3 중 하나인 direction 을 속도로 바꿔주는 함수
 def direction_to_velocity(direction: int):
     if direction == enums.UP:
@@ -13,6 +14,7 @@ def direction_to_velocity(direction: int):
         return 0, 1
     elif direction == enums.LEFT:
         return -1, 0
+
 
 # 타일의 기반을 정의하는 클래스
 class Tile:
@@ -66,20 +68,20 @@ class Arrow(Tile):
         self.direction %= 4
         pass
 
+
 class Suicide(Tile):
-    def tick(self, x, y):
-        if Suicide.when_pushed(self, Arrow):
-            game.world_tiles[Arrow.get_position()[0]][Arrow.get_position()[1]] = None
-            game.world_tiles[self.get_position()[0]][self.get_position()[1]] = None
+    def when_pushed(self, other):
+        pos1 = other.get_position()
+        pos2 = self.get_position()
+        game.world_tiles[pos1[0]][pos1[1]] = None
+        game.world_tiles[pos2[0]][pos2[1]] = None
+
 
 class Lava(Tile):
-    def tick(self, x, y):
-        if Lava.when_pushed(self, Arrow):
-            game.world_tiles[Arrow.get_position()[0]][Arrow.get_position()[1]] = None
+    def when_pushed(self, other):
+        pos1 = other.get_position()
+        game.world_tiles[pos1[0]][pos1[1]] = None
+
 
 class Wall(Tile):
-    def tick(self, x, y):
-        if Wall.when_pushed(self, Arrow):
-            current_velocity = (0, 0)
-            Arrow.velocity = current_velocity
-            
+    pass

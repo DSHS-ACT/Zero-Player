@@ -113,6 +113,8 @@ def init_window():
             debug_screen()
         if configuration.show_help:
             show_help()
+        if configuration.show_placer:
+            show_placer()
 
         imgui.render()
         impl.render(imgui.get_draw_data())
@@ -136,6 +138,7 @@ def show_help():
     imgui.text("게임 종료: ESC")
     imgui.text("게임 속도 가속: K")
     imgui.text("게임 속도 감속: L")
+    imgui.text("엔티티 배치 메뉴: P")
     imgui.text("시뮬레이션 시작: SPACE")
     imgui.end()
 
@@ -151,6 +154,11 @@ def debug_screen():
     for texture in Texture.TEXTURE_LIST:
         imgui.image(texture.id, 60, 60, (0, 1), (1, 0))
 
+    imgui.end()
+
+def show_placer():
+    imgui.begin("타일 배치 메뉴")
+    imgui.image_button(Texture.ARROW.id, 120, 120, (0, 1), (1, 0))
     imgui.end()
 
 def main():

@@ -7,6 +7,7 @@ class Global:
         self.is_wrapping = False
         self.show_debug_ui = False
         self.show_help = False
+        self.show_placer = False
 
 
 configuration = Global()
