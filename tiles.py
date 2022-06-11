@@ -42,6 +42,9 @@ class Tile:
     def pushing(self, other):
         pass
 
+    def when_pushed(self, other):
+        pass
+
     # 이 타일의 정보를 GPU가 알아들을 수 있는 바이트로 변환하는 함수
     def to_int(self):
         if self is None:

@@ -58,3 +58,4 @@ def tick():
                 if is_different:
                     collided = world_tiles[next_position[0]][next_position[1]]
                     tile.pushing(collided)
+                    collided.when_pushed(tile)
