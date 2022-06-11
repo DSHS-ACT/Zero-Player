@@ -83,6 +83,10 @@ class Shader:
         location = self.get_uniform_location(uniform_name)
         glUniform4f(location, v0, v1, v2, v3)
 
+    def set_uniform2f(self, uniform_name: str, v0: float, v1: float):
+        location = self.get_uniform_location(uniform_name)
+        glUniform2f(location, v0, v1)
+
     def set_uniform1f(self, uniform_name: str, value: float):
         location = self.get_uniform_location(uniform_name)
         glUniform1f(location, value)

@@ -1,10 +1,10 @@
 from math import floor
+
 import glfw
+
+import enums
 import game
 from global_variables import configuration
-import tiles
-import enums
-from texture import Texture
 
 """
 ZPG의 키보드 핸들러
@@ -45,7 +45,8 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
         configuration.game_speed = allowed_speeds[index]
 
     if key == glfw.KEY_SPACE:
-        configuration.ticking = not configuration.ticking
+        if game.holding is None:
+            configuration.ticking = not configuration.ticking
 
     if key == glfw.KEY_U:
         configuration.is_wrapping = not configuration.is_wrapping
@@ -55,6 +56,9 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
 
     if key == glfw.KEY_SLASH:
         configuration.show_help = not configuration.show_help
+
+    if key == glfw.KEY_P:
+        configuration.show_placer = not configuration.show_placer
 
 """
 ZPG 의 마우스 핸들러
@@ -67,7 +71,7 @@ def on_mouse(window, button: int, action: int, mods: int):
         return
 
     # GUI 표시중에는 마우스 입력 무시
-    if configuration.show_help or configuration.show_debug_ui:
+    if configuration.show_help or configuration.show_debug_ui or configuration.show_placer:
         return
 
     # 왼쪽 버튼인가?
@@ -99,12 +103,17 @@ def on_mouse(window, button: int, action: int, mods: int):
                 direction = enums.UP
 
             clicked_tile = game.world_tiles[world_x][world_y]
-            if clicked_tile is None or isinstance(clicked_tile, tiles.Arrow):
-                arrow = tiles.Arrow(Texture.ARROW)
-                arrow.direction = direction
-                game.world_tiles[world_x][world_y] = arrow
+            if clicked_tile is None:
+                if game.holding is not None:
+                    game.world_tiles[world_x][world_y] = game.holding
+                    game.holding = None
+            else:
+                if game.holding is None:
+                    game.holding = clicked_tile
+                    game.world_tiles[world_x][world_y] = None
         else:
-            game.world_tiles[world_x][world_y] = None
+            if game.holding is None:
+                game.world_tiles[world_x][world_y] = None
 
 """
 마우스 휠 핸들러

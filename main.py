@@ -1,20 +1,21 @@
-import glfw
-import imgui
-import game
-import inputhandler
-import numpy as np
 import os
 
+import glfw
+import imgui
+import numpy as np
+from OpenGL.GL import *
+from imgui.integrations.glfw import GlfwRenderer
+
+import inputhandler
+from enums import *
+from global_variables import configuration
 from index_buffer import IndexBuffer
 from renderer import Renderer
 from shader import Shader
-from texture import Texture
+from tiles import *
 from vertex_array import VertexArray
 from vertex_buffer import VertexBuffer
 from vertex_buffer_layout import VertexBufferLayout
-from global_variables import configuration
-from OpenGL.GL import *
-from imgui.integrations.glfw import GlfwRenderer
 
 window = None
 
@@ -102,6 +103,13 @@ def init_window():
         shader.bind()
         shader.set_uniform1f("width", configuration.width)
         shader.set_uniform1iv("world", 32 * 18, game.get_gpu_world())
+        if game.holding is not None:
+            shader.set_uniform1i("holding", game.holding.texture.slot)
+        else:
+            shader.set_uniform1i("holding", -1)
+
+        mouse_x, mouse_y = glfw.get_cursor_pos(window)
+        shader.set_uniform2f("mouse_pos", mouse_x, mouse_y)
 
         renderer.draw(vertex_array, index_buffer, shader)
 
@@ -129,6 +137,7 @@ def init_window():
         texture.delete()
     return
 
+
 def show_help():
     imgui.begin("제로 플레이어 게임 조작키")
     imgui.text("월드 테두리 이어 붙이기: U")
@@ -141,6 +150,7 @@ def show_help():
     imgui.text("엔티티 배치 메뉴: P")
     imgui.text("시뮬레이션 시작: SPACE")
     imgui.end()
+
 
 def debug_screen():
     imgui.begin("제로 플레이어 게임 디버그 UI")
@@ -156,10 +166,22 @@ def debug_screen():
 
     imgui.end()
 
+
 def show_placer():
+    if game.holding is not None:
+        configuration.show_placer = False
+        return
+
     imgui.begin("타일 배치 메뉴")
-    imgui.image_button(Texture.ARROW.id, 120, 120, (0, 1), (1, 0))
+    if imgui.image_button(Texture.ARROW.id, 120, 120, (0, 1), (1, 0)):
+        arrow = Arrow(Texture.ARROW)
+        arrow.direction = UP
+        game.holding = arrow
+    if imgui.image_button(Texture.WALL.id, 120, 120, (0, 1), (1, 0)):
+        wall = Wall(Texture.WALL)
+        game.holding = wall
     imgui.end()
+
 
 def main():
     print("PID:", os.getpid())

@@ -5,8 +5,13 @@ out vec4 color;
 uniform float width;
 uniform sampler2D tiles[32];
 uniform int world[32 * 18];
+uniform int holding;
+uniform vec2 mouse_pos;
 
 void drawLines(vec2 coordinate);
+void draw_texture(int slot, vec2 coordinate);
+void draw_holding(int slot, vec2 mouse_pos, vec2 texture_coordinate, vec2 screen_coordinate, vec2 transformed_coordinate);
+vec2 rotate_vec2(int direction, vec2 to_rotate);
 
 int UP = 0;
 int RIGHT = 1;
@@ -24,51 +29,63 @@ void main() {
     int texture_number = 31 & world[tile_index];
     int direction = 3 & (world[tile_index] >> 5);
 
-    vec2 transformed_coord;
-    if (direction == UP) {
-        transformed_coord = mapped_texCoord;
-    } else if (direction == RIGHT) {
-        transformed_coord = vec2(-mapped_texCoord.y, mapped_texCoord.x);
-    } else if (direction == DOWN) {
-        transformed_coord = vec2(mapped_texCoord.x, -mapped_texCoord.y);
-    } else if (direction == LEFT) {
-        transformed_coord = vec2(mapped_texCoord.y, -mapped_texCoord.x);
-    }
+    vec2 transformed_coord = rotate_vec2(direction, mapped_texCoord);
 
-    if (texture_number == 0) color = texture(tiles[0], transformed_coord);
-    if (texture_number == 1) color = texture(tiles[1], transformed_coord);
-    if (texture_number == 2) color = texture(tiles[2], transformed_coord);
-    if (texture_number == 3) color = texture(tiles[3], transformed_coord);
-    if (texture_number == 4) color = texture(tiles[4], transformed_coord);
-    if (texture_number == 5) color = texture(tiles[5], transformed_coord);
-    if (texture_number == 6) color = texture(tiles[6], transformed_coord);
-    if (texture_number == 7) color = texture(tiles[7], transformed_coord);
-    if (texture_number == 8) color = texture(tiles[8], transformed_coord);
-    if (texture_number == 9) color = texture(tiles[9], transformed_coord);
-    if (texture_number == 10) color = texture(tiles[10], transformed_coord);
-    if (texture_number == 11) color = texture(tiles[11], transformed_coord);
-    if (texture_number == 12) color = texture(tiles[12], transformed_coord);
-    if (texture_number == 13) color = texture(tiles[13], transformed_coord);
-    if (texture_number == 14) color = texture(tiles[14], transformed_coord);
-    if (texture_number == 15) color = texture(tiles[15], transformed_coord);
-    if (texture_number == 16) color = texture(tiles[16], transformed_coord);
-    if (texture_number == 17) color = texture(tiles[17], transformed_coord);
-    if (texture_number == 18) color = texture(tiles[18], transformed_coord);
-    if (texture_number == 19) color = texture(tiles[19], transformed_coord);
-    if (texture_number == 20) color = texture(tiles[20], transformed_coord);
-    if (texture_number == 21) color = texture(tiles[21], transformed_coord);
-    if (texture_number == 22) color = texture(tiles[22], transformed_coord);
-    if (texture_number == 23) color = texture(tiles[23], transformed_coord);
-    if (texture_number == 24) color = texture(tiles[24], transformed_coord);
-    if (texture_number == 25) color = texture(tiles[25], transformed_coord);
-    if (texture_number == 26) color = texture(tiles[26], transformed_coord);
-    if (texture_number == 27) color = texture(tiles[27], transformed_coord);
-    if (texture_number == 28) color = texture(tiles[28], transformed_coord);
-    if (texture_number == 29) color = texture(tiles[29], transformed_coord);
-    if (texture_number == 30) color = texture(tiles[30], transformed_coord);
-    if (texture_number == 31) color = texture(tiles[31], transformed_coord);
+    draw_texture(texture_number, transformed_coord);
 
     drawLines(coord);
+
+    if (holding != -1){
+        draw_holding(holding, mouse_pos, frag_texCoord, y_flipped, transformed_coord);
+    }
+}
+
+vec2 rotate_vec2(int direction, vec2 to_rotate) {
+    if (direction == UP) {
+        return to_rotate;
+    } else if (direction == RIGHT) {
+        return vec2(-to_rotate.y, to_rotate.x);
+    } else if (direction == DOWN) {
+        return vec2(to_rotate.x, -to_rotate.y);
+    } else if (direction == LEFT) {
+        return vec2(to_rotate.y, -to_rotate.x);
+    }
+    return vec2(0, 0);
+}
+
+void draw_texture(int slot, vec2 coordinate) {
+    if (slot == 0) color = texture(tiles[0], coordinate);
+    if (slot == 1) color = texture(tiles[1], coordinate);
+    if (slot == 2) color = texture(tiles[2], coordinate);
+    if (slot == 3) color = texture(tiles[3], coordinate);
+    if (slot == 4) color = texture(tiles[4], coordinate);
+    if (slot == 5) color = texture(tiles[5], coordinate);
+    if (slot == 6) color = texture(tiles[6], coordinate);
+    if (slot == 7) color = texture(tiles[7], coordinate);
+    if (slot == 8) color = texture(tiles[8], coordinate);
+    if (slot == 9) color = texture(tiles[9], coordinate);
+    if (slot == 10) color = texture(tiles[10], coordinate);
+    if (slot == 11) color = texture(tiles[11], coordinate);
+    if (slot == 12) color = texture(tiles[12], coordinate);
+    if (slot == 13) color = texture(tiles[13], coordinate);
+    if (slot == 14) color = texture(tiles[14], coordinate);
+    if (slot == 15) color = texture(tiles[15], coordinate);
+    if (slot == 16) color = texture(tiles[16], coordinate);
+    if (slot == 17) color = texture(tiles[17], coordinate);
+    if (slot == 18) color = texture(tiles[18], coordinate);
+    if (slot == 19) color = texture(tiles[19], coordinate);
+    if (slot == 20) color = texture(tiles[20], coordinate);
+    if (slot == 21) color = texture(tiles[21], coordinate);
+    if (slot == 22) color = texture(tiles[22], coordinate);
+    if (slot == 23) color = texture(tiles[23], coordinate);
+    if (slot == 24) color = texture(tiles[24], coordinate);
+    if (slot == 25) color = texture(tiles[25], coordinate);
+    if (slot == 26) color = texture(tiles[26], coordinate);
+    if (slot == 27) color = texture(tiles[27], coordinate);
+    if (slot == 28) color = texture(tiles[28], coordinate);
+    if (slot == 29) color = texture(tiles[29], coordinate);
+    if (slot == 30) color = texture(tiles[30], coordinate);
+    if (slot == 31) color = texture(tiles[31], coordinate);
 }
 
 void drawLines(vec2 coordinate){
@@ -79,4 +96,14 @@ void drawLines(vec2 coordinate){
     }else if (yMod < width || (60 - width) < yMod) {
         color = vec4(1, 1, 1, 1);
     }
+}
+
+void draw_holding(int slot, vec2 mouse_pos, vec2 texture_coordinate, vec2 screen_coordinate, vec2 transformed_coordinate) {
+    vec2 difference = screen_coordinate - mouse_pos + vec2(30, 30);
+    if (difference.x < 0 || difference.x > 60) return;
+    if (difference.y < 0 || difference.y > 60) return;
+
+    vec2 mouse_transformed_coordinate =
+        vec2(transformed_coordinate.x - (mouse_pos.x / 60), transformed_coordinate.y + (mouse_pos.y / 60));
+    draw_texture(slot, mouse_transformed_coordinate + vec2(0.5, 0.5));
 }

@@ -6,6 +6,9 @@ from texture import Texture
 
 world_tiles = np.empty((32, 18), dtype=Texture)
 
+# 현재 마우스에 잡고 있는 타일
+holding = None
+
 """
 값을 min_value <= num <= max_value 사이로 만드는 함수
 """
