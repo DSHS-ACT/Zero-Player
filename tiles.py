@@ -66,3 +66,20 @@ class Arrow(Tile):
         self.direction %= 4
         pass
 
+class Suicide(Tile):
+    def tick(self, x, y):
+        if Suicide.when_pushed(self, Arrow):
+            game.world_tiles[Arrow.get_position()[0]][Arrow.get_position()[1]] = None
+            game.world_tiles[self.get_position()[0]][self.get_position()[1]] = None
+
+class Lava(Tile):
+    def tick(self, x, y):
+        if Lava.when_pushed(self, Arrow):
+            game.world_tiles[Arrow.get_position()[0]][Arrow.get_position()[1]] = None
+
+class Wall(Tile):
+    def tick(self, x, y):
+        if Wall.when_pushed(self, Arrow):
+            current_velocity = (0, 0)
+            Arrow.velocity = current_velocity
+            
