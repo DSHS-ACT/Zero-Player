@@ -50,4 +50,7 @@ class Texture:
         Texture.EMPTY = Texture("empty.png")
         Texture.ARROW = Texture("1.png")
         Texture.QUESTION = Texture("2.png")
-        Texture.TEXTURE_LIST = [Texture.EMPTY, Texture.ARROW, Texture.QUESTION]
+        Texture.SUICIDE = Texture("5.png")
+        Texture.LAVA = Texture("6.png")
+        Texture.WALL = Texture("7.png")
+        Texture.TEXTURE_LIST = [Texture.EMPTY, Texture.ARROW, Texture.QUESTION, Texture.SUICIDE. Texture.LAVA, Texture.WALL]
