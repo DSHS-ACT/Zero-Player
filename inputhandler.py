@@ -4,6 +4,7 @@ import glfw
 
 import game
 from global_variables import configuration
+import data
 
 """
 ZPG의 키보드 핸들러
@@ -16,6 +17,8 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
         return
 
     allowed_speeds = [0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0, 10.0, 12.0, 15.0, 20.0, 30.0]
+    is_ctrl_pressed = glfw.get_key(window, glfw.KEY_LEFT_CONTROL)
+    is_alt_pressed = glfw.get_key(window, glfw.KEY_LEFT_ALT)
     if key == glfw.KEY_ESCAPE:
         glfw.set_window_should_close(window, True)
 
@@ -62,6 +65,66 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
         configuration.show_debug_ui = False
         if not configuration.ticking:
             configuration.show_placer = True
+
+    if key == glfw.KEY_1:
+        if is_ctrl_pressed:
+            data.serialize(game.world_tiles, "1.map")
+        elif is_alt_pressed:
+            data.deserialize_to_world(game.world_tiles, "1.map")
+
+    if key == glfw.KEY_2:
+        if is_ctrl_pressed:
+            data.serialize(game.world_tiles, "2.map")
+        elif is_alt_pressed:
+            data.deserialize_to_world(game.world_tiles, "2.map")
+
+    if key == glfw.KEY_3:
+        if is_ctrl_pressed:
+            data.serialize(game.world_tiles, "3.map")
+        elif is_alt_pressed:
+            data.deserialize_to_world(game.world_tiles, "3.map")
+
+    if key == glfw.KEY_4:
+        if is_ctrl_pressed:
+            data.serialize(game.world_tiles, "4.map")
+        elif is_alt_pressed:
+            data.deserialize_to_world(game.world_tiles, "4.map")
+
+    if key == glfw.KEY_5:
+        if is_ctrl_pressed:
+            data.serialize(game.world_tiles, "5.map")
+        elif is_alt_pressed:
+            data.deserialize_to_world(game.world_tiles, "5.map")
+
+    if key == glfw.KEY_6:
+        if is_ctrl_pressed:
+            data.serialize(game.world_tiles, "6.map")
+        elif is_alt_pressed:
+            data.deserialize_to_world(game.world_tiles, "6.map")
+
+    if key == glfw.KEY_7:
+        if is_ctrl_pressed:
+            data.serialize(game.world_tiles, "7.map")
+        elif is_alt_pressed:
+            data.deserialize_to_world(game.world_tiles, "7.map")
+
+    if key == glfw.KEY_8:
+        if is_ctrl_pressed:
+            data.serialize(game.world_tiles, "8.map")
+        elif is_alt_pressed:
+            data.deserialize_to_world(game.world_tiles, "8.map")
+
+    if key == glfw.KEY_9:
+        if is_ctrl_pressed:
+            data.serialize(game.world_tiles, "9.map")
+        elif is_alt_pressed:
+            data.deserialize_to_world(game.world_tiles, "9.map")
+
+    if key == glfw.KEY_0:
+        if is_ctrl_pressed:
+            data.serialize(game.world_tiles, "0.map")
+        elif is_alt_pressed:
+            data.deserialize_to_world(game.world_tiles, "0.map")
 
 """
 ZPG 의 마우스 핸들러

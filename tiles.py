@@ -63,6 +63,9 @@ class Tile:
         position = self.get_position()
         return position[0] + self.velocity[0], position[1] + self.velocity[1]
 
+    def serialize(self):
+        pass
+
 
 class Arrow(Tile):
     def tick(self, x, y):
@@ -81,20 +84,34 @@ class Arrow(Tile):
         self.direction += 2
         self.direction %= 4
 
+    def serialize(self):
+        position = self.get_position()
+        return str(position[0]) + " " + str(position[1]) + " arrow " + str(self.direction)
+
 
 class Suicide(Tile):
     def when_pushed(self, other):
         other.is_alive = False
         self.is_alive = False
 
+    def serialize(self):
+        position = self.get_position()
+        return str(position[0]) + " " + str(position[1]) + " suicide"
+
 
 class Lava(Tile):
     def when_pushed(self, other):
         other.is_alive = False
 
+    def serialize(self):
+        position = self.get_position()
+        return str(position[0]) + " " + str(position[1]) + " lava"
+
 
 class Wall(Tile):
-    pass
+    def serialize(self):
+        position = self.get_position()
+        return str(position[0]) + " " + str(position[1]) + " wall"
 
 
 class Pushable(Tile):
@@ -117,6 +134,10 @@ class Pushable(Tile):
             at_next.when_pushed(self)
         if game.world_tiles[next_position[0]][next_position[1]] is None:
             game.try_move(self, self.velocity)
+
+    def serialize(self):
+        position = self.get_position()
+        return str(position[0]) + " " + str(position[1]) + " pushable"
 
 
 class Directional(Tile):
@@ -142,3 +163,7 @@ class Directional(Tile):
             at_next.when_pushed(self)
         if game.world_tiles[next_position[0]][next_position[1]] is None:
             game.try_move(self, self.velocity)
+
+    def serialize(self):
+        position = self.get_position()
+        return str(position[0]) + " " + str(position[1]) + " directional " + str(self.direction)
