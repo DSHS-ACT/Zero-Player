@@ -58,6 +58,8 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
         configuration.show_help = not configuration.show_help
 
     if key == glfw.KEY_P:
+        configuration.show_help = False
+        configuration.show_debug_ui = False
         if not configuration.ticking:
             configuration.show_placer = True
 
