@@ -63,6 +63,7 @@ class Tile:
         position = self.get_position()
         return position[0] + self.velocity[0], position[1] + self.velocity[1]
 
+
 class Arrow(Tile):
     def tick(self, x, y):
         self.velocity = direction_to_velocity(self.direction)
@@ -70,11 +71,10 @@ class Arrow(Tile):
         move_result = game.try_move(self, self.velocity)
         if move_result is not None:
             move_result.when_pushed(self)
-            if isinstance(move_result, Pushable):
+            if isinstance(move_result, Pushable) or isinstance(move_result, Directional):
                 game.try_move(self, self.velocity)
             else:
                 self.pushing(move_result)
-
 
     def pushing(self, other):
         assert isinstance(other, Tile)
@@ -119,5 +119,26 @@ class Pushable(Tile):
             game.try_move(self, self.velocity)
 
 
+class Directional(Tile):
+    def __init__(self, texture: Texture):
+        super().__init__(texture)
+        self.pushed = False
 
+    def tick(self, x, y):
+        if not self.pushed:
+            self.velocity = (0, 0)
+        self.pushed = False
 
+    def when_pushed(self, other):
+        if other.direction % 2 != self.direction % 2:
+            return
+
+        self.pushed = True
+        self.velocity = other.velocity
+
+        next_position = self.get_next()
+        at_next = game.world_tiles[next_position[0]][next_position[1]]
+        if at_next is not None:
+            at_next.when_pushed(self)
+        if game.world_tiles[next_position[0]][next_position[1]] is None:
+            game.try_move(self, self.velocity)

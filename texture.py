@@ -13,6 +13,7 @@ class Texture:
     LAVA = None
     WALL = None
     PUSHABLE = None
+    DIRECTIONAL = None
 
     # 현재 게임에서 사용하는 텍스쳐들이 들어있는 리스트, create_texture 정적 함수가 호출되면 초기화된다
     TEXTURE_LIST = None
@@ -58,5 +59,6 @@ class Texture:
         Texture.LAVA = Texture("6.png")
         Texture.WALL = Texture("7.png")
         Texture.PUSHABLE = Texture("pushable.png")
+        Texture.DIRECTIONAL = Texture("directional.png")
         Texture.TEXTURE_LIST = [Texture.EMPTY, Texture.ARROW, Texture.QUESTION, Texture.SUICIDE, Texture.LAVA,
-                                Texture.WALL, Texture.PUSHABLE]
+                                Texture.WALL, Texture.PUSHABLE, Texture.DIRECTIONAL]
