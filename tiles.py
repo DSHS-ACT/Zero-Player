@@ -61,7 +61,7 @@ class Tile:
 
     def get_next(self):
         position = self.get_position()
-        return position[0] + self.velocity[0], position[1] + self.velocity[1]
+        return game.correct_position((position[0] + self.velocity[0], position[1] + self.velocity[1]))
 
     def serialize(self):
         pass
@@ -132,6 +132,8 @@ class Pushable(Tile):
 
         next_position = self.get_next()
         at_next = game.world_tiles[next_position[0]][next_position[1]]
+        if next_position == self.get_position():
+            return
         if at_next is not None:
             at_next.when_pushed(self)
         if game.world_tiles[next_position[0]][next_position[1]] is None:
@@ -161,6 +163,8 @@ class Directional(Tile):
 
         next_position = self.get_next()
         at_next = game.world_tiles[next_position[0]][next_position[1]]
+        if next_position == self.get_position():
+            return
         if at_next is not None:
             at_next.when_pushed(self)
         if game.world_tiles[next_position[0]][next_position[1]] is None:
