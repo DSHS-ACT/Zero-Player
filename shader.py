@@ -78,6 +78,8 @@ class Shader:
             print("쉐이더 프로그램 링크 오류")
             if "unsuccessful" in program_log:
                 raise Exception(program_log)
+            else:
+                print(program_log)
         return shader_program
 
     def set_uniform4f(self, uniform_name: str, v0: float, v1: float, v2: float, v3: float):
