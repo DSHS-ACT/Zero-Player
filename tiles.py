@@ -74,7 +74,9 @@ class Arrow(Tile):
         move_result = game.try_move(self, self.velocity)
         if move_result is not None:
             move_result.when_pushed(self)
-            if isinstance(move_result, Pushable) or isinstance(move_result, Directional):
+            if isinstance(move_result, Pushable)\
+                    or isinstance(move_result, Directional)\
+                    or isinstance(move_result, Star):
                 game.try_move(self, self.velocity)
             else:
                 self.pushing(move_result)
@@ -167,3 +169,7 @@ class Directional(Tile):
     def serialize(self):
         position = self.get_position()
         return str(position[0]) + " " + str(position[1]) + " directional " + str(self.direction)
+
+class Star(Tile):
+    def when_pushed(self, other):
+        self.is_alive = False

@@ -202,7 +202,9 @@ def show_placer():
     if imgui.image_button(Texture.PUSHABLE.id, 120, 120, (0, 1), (1, 0)):
         tile = Pushable(Texture.PUSHABLE)
         game.holding = tile
+
     placer_entry(Texture.DIRECTIONAL, Directional)
+    placer_entry(Texture.STAR, Star)
     imgui.end()
 
 def placer_entry(texture, tile_class):
