@@ -76,7 +76,7 @@ class Shader:
 
         if program_log:
             print("쉐이더 프로그램 링크 오류")
-            if "unsuccessful" in program_log:
+            if "unsuccessful" in str(program_log):
                 raise Exception(program_log)
             else:
                 print(program_log)
