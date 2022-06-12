@@ -19,7 +19,7 @@ from vertex_buffer_layout import VertexBufferLayout
 
 window = None
 
-
+# afasdfsdfsadfsdf
 def bind_textures(to_load):
     for index, texture in enumerate(to_load):
         texture.bind(index + 1)
@@ -65,9 +65,6 @@ def init_window():
 
     index_buffer = IndexBuffer(indices, 6)
 
-    shader = Shader("vertex.vert", "fragment.frag")
-    shader.bind()
-
     imgui.create_context()
     io = imgui.get_io()
 
@@ -79,6 +76,9 @@ def init_window():
 
     Texture.create_textures()
     bind_textures(Texture.TEXTURE_LIST)
+
+    shader = Shader("vertex.vert", "fragment.frag")
+    shader.bind()
 
     # GPU 에 보내지는 유니폼은 슬롯 번호들의 배열
     shader.set_uniform1iv(
