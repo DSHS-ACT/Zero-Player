@@ -10,7 +10,7 @@ uniform vec2 mouse_pos;
 
 void drawLines(vec2 coordinate);
 void draw_texture(int slot, vec2 coordinate);
-void draw_holding(int slot, vec2 mouse_pos, vec2 texture_coordinate, vec2 screen_coordinate, vec2 transformed_coordinate);
+void draw_holding(int slot, vec2 mouse_pos, vec2 texture_coordinate, vec2 screen_coordinate, vec2 mapped_texCoord);
 vec2 rotate_vec2(int direction, vec2 to_rotate);
 
 int UP = 0;
@@ -36,7 +36,7 @@ void main() {
     drawLines(coord);
 
     if (holding != -1){
-        draw_holding(holding, mouse_pos, frag_texCoord, y_flipped, transformed_coord);
+        draw_holding(holding, mouse_pos, frag_texCoord, y_flipped, mapped_texCoord);
     }
 }
 
@@ -98,12 +98,16 @@ void drawLines(vec2 coordinate){
     }
 }
 
-void draw_holding(int slot, vec2 mouse_pos, vec2 texture_coordinate, vec2 screen_coordinate, vec2 transformed_coordinate) {
+void draw_holding(int holding, vec2 mouse_pos, vec2 texture_coordinate, vec2 screen_coordinate, vec2 mapped_texCoord) {
     vec2 difference = screen_coordinate - mouse_pos + vec2(30, 30);
     if (difference.x < 0 || difference.x > 60) return;
     if (difference.y < 0 || difference.y > 60) return;
 
+    int texture_number = 31 & holding;
+    int direction = 3 & (holding >> 5);
+
     vec2 mouse_transformed_coordinate =
-        vec2(transformed_coordinate.x - (mouse_pos.x / 60), transformed_coordinate.y + (mouse_pos.y / 60));
-    draw_texture(slot, mouse_transformed_coordinate + vec2(0.5, 0.5));
+        vec2(mapped_texCoord.x - (mouse_pos.x / 60), mapped_texCoord.y + (mouse_pos.y / 60));
+    vec2 transformed_coordinate = rotate_vec2(direction, mouse_transformed_coordinate);
+    draw_texture(texture_number, transformed_coordinate + vec2(0.5, 0.5));
 }

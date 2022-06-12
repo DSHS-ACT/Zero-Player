@@ -104,7 +104,7 @@ def init_window():
         shader.set_uniform1f("width", configuration.width)
         shader.set_uniform1iv("world", 32 * 18, game.get_gpu_world())
         if game.holding is not None:
-            shader.set_uniform1i("holding", game.holding.texture.slot)
+            shader.set_uniform1i("holding", game.holding.to_int())
         else:
             shader.set_uniform1i("holding", -1)
 
@@ -173,13 +173,35 @@ def show_placer():
         return
 
     imgui.begin("타일 배치 메뉴")
+    imgui.text("화살표 타일은, 방향키를 누루면서 클릭하여 화살표의 방향을 지정할 수 있습니다")
     if imgui.image_button(Texture.ARROW.id, 120, 120, (0, 1), (1, 0)):
         arrow = Arrow(Texture.ARROW)
-        arrow.direction = UP
+
+        if glfw.PRESS == glfw.get_key(window, glfw.KEY_UP):
+            direction = enums.UP
+        elif glfw.PRESS == glfw.get_key(window, glfw.KEY_RIGHT):
+            direction = enums.RIGHT
+        elif glfw.PRESS == glfw.get_key(window, glfw.KEY_DOWN):
+            direction = enums.DOWN
+        elif glfw.PRESS == glfw.get_key(window, glfw.KEY_LEFT):
+            direction = enums.LEFT
+        else:
+            # 방향키를 누루고 있지 않을시, 위로 함
+            direction = enums.UP
+        arrow.direction = direction
         game.holding = arrow
+    if imgui.image_button(Texture.SUICIDE.id, 120, 120, (0, 1), (1, 0)):
+        suicide = Suicide(Texture.SUICIDE)
+        game.holding = suicide
+    if imgui.image_button(Texture.LAVA.id, 120, 120, (0, 1), (1, 0)):
+        lava = Lava(Texture.LAVA)
+        game.holding = lava
     if imgui.image_button(Texture.WALL.id, 120, 120, (0, 1), (1, 0)):
         wall = Wall(Texture.WALL)
         game.holding = wall
+    if imgui.image_button(Texture.PUSHABLE.id, 120, 120, (0, 1), (1, 0)):
+        tile = Pushable(Texture.PUSHABLE)
+        game.holding = tile
     imgui.end()
 
 

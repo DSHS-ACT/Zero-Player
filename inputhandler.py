@@ -2,7 +2,6 @@ from math import floor
 
 import glfw
 
-import enums
 import game
 from global_variables import configuration
 
@@ -47,6 +46,7 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
     if key == glfw.KEY_SPACE:
         if game.holding is None:
             configuration.ticking = not configuration.ticking
+            configuration.show_placer = False
 
     if key == glfw.KEY_U:
         configuration.is_wrapping = not configuration.is_wrapping
@@ -58,7 +58,8 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
         configuration.show_help = not configuration.show_help
 
     if key == glfw.KEY_P:
-        configuration.show_placer = not configuration.show_placer
+        if not configuration.ticking:
+            configuration.show_placer = True
 
 """
 ZPG 의 마우스 핸들러
@@ -88,20 +89,6 @@ def on_mouse(window, button: int, action: int, mods: int):
     print("타일: (" + str(world_x) + ", " + str(world_y) + ")")
     if is_press:
         if is_left:
-
-            # 현재 누루고 있는 키보드 방향키의 방향 파악
-            if glfw.PRESS == glfw.get_key(window, glfw.KEY_UP):
-                direction = enums.UP
-            elif glfw.PRESS == glfw.get_key(window, glfw.KEY_RIGHT):
-                direction = enums.RIGHT
-            elif glfw.PRESS == glfw.get_key(window, glfw.KEY_DOWN):
-                direction = enums.DOWN
-            elif glfw.PRESS == glfw.get_key(window, glfw.KEY_LEFT):
-                direction = enums.LEFT
-            else:
-                # 방향키를 누루고 있지 않을시, 위로 함
-                direction = enums.UP
-
             clicked_tile = game.world_tiles[world_x][world_y]
             if clicked_tile is None:
                 if game.holding is not None:

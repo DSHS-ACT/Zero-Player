@@ -26,11 +26,14 @@ class Tile:
         # UUID는 64비트 길이의 절때 겹칠 일이 없는 고유한 무작위로 생성되는 난수이다.
         # 이를 사용하여 생성된 타일들을 구분한다.
         self.uuid = uuid.uuid4()
+        self.is_alive = True
 
     # 해당 타일의 위치를 받아오는 함수. 타일은 위치 데이터를 가지고 있지 않기에 UUID 를 비교하여야 한다.
     def get_position(self):
         for x in range(0, 32):
             for y in range(0, 18):
+                if game.world_tiles[x][y] is None:
+                    continue
                 if game.world_tiles[x][y].uuid == self.uuid:
                     return x, y
         # 예외 발생시키지 말고 (-1, -1) 를 반환해야 할려나?
@@ -56,32 +59,65 @@ class Tile:
             element += self.direction << 5
             return element
 
+    def get_next(self):
+        position = self.get_position()
+        return position[0] + self.velocity[0], position[1] + self.velocity[1]
 
 class Arrow(Tile):
     def tick(self, x, y):
         self.velocity = direction_to_velocity(self.direction)
 
+        move_result = game.try_move(self, self.velocity)
+        if move_result is not None:
+            move_result.when_pushed(self)
+            if isinstance(move_result, Pushable):
+                game.try_move(self, self.velocity)
+            else:
+                self.pushing(move_result)
+
+
     def pushing(self, other):
         assert isinstance(other, Tile)
-
         self.direction += 2
         self.direction %= 4
-        pass
 
 
 class Suicide(Tile):
     def when_pushed(self, other):
-        pos1 = other.get_position()
-        pos2 = self.get_position()
-        game.world_tiles[pos1[0]][pos1[1]] = None
-        game.world_tiles[pos2[0]][pos2[1]] = None
+        other.is_alive = False
+        self.is_alive = False
 
 
 class Lava(Tile):
     def when_pushed(self, other):
-        pos1 = other.get_position()
-        game.world_tiles[pos1[0]][pos1[1]] = None
+        other.is_alive = False
 
 
 class Wall(Tile):
     pass
+
+
+class Pushable(Tile):
+    def __init__(self, texture: Texture):
+        super().__init__(texture)
+        self.pushed = False
+
+    def tick(self, x, y):
+        if not self.pushed:
+            self.velocity = (0, 0)
+        self.pushed = False
+
+    def when_pushed(self, other):
+        self.pushed = True
+        self.velocity = other.velocity
+
+        next_position = self.get_next()
+        at_next = game.world_tiles[next_position[0]][next_position[1]]
+        if at_next is not None:
+            at_next.when_pushed(self)
+        if game.world_tiles[next_position[0]][next_position[1]] is None:
+            game.try_move(self, self.velocity)
+
+
+
+

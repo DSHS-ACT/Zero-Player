@@ -15,6 +15,13 @@ holding = None
 def clamp(num, min_value, max_value):
     return max(min(num, max_value), min_value)
 
+def correct_position(position):
+    if configuration.is_wrapping:
+        next_position = position[0] % 32, position[1] % 18
+    else:
+        next_position = (clamp(position[0], 0, 31), clamp(position[1], 0, 17))
+    return next_position
+
 """
 world 배열을 GPU에 알맞은 형태로 가공하는 함수
 """
@@ -24,6 +31,7 @@ def get_gpu_world():
     to_send = processor(world_tiles)
 
     return to_send.flatten(order="F")
+
 
 """
 월드의 시간을 진행시키는 함수
@@ -46,19 +54,18 @@ def tick():
 
             tile.tick(x, y)
             ticked.append(tile)
-            print("방향:", tile.direction)
 
-            if configuration.is_wrapping:
-                next_position = (x + tile.velocity[0]) % 32, (y + tile.velocity[1]) % 18
-            else:
-                next_position = (clamp(x + tile.velocity[0], 0, 31), clamp(y + tile.velocity[1], 0, 17))
+    for dead in filter(lambda tile: tile is not None and not tile.is_alive, world_tiles.flatten()):
+        position = dead.get_position()
+        world_tiles[position[0]][position[1]] = None
 
-            is_different = (x, y) != next_position
-            if world_tiles[next_position[0]][next_position[1]] is None:
-                world_tiles[next_position[0]][next_position[1]] = tile
-                world_tiles[x][y] = None
-            else:
-                if is_different:
-                    collided = world_tiles[next_position[0]][next_position[1]]
-                    tile.pushing(collided)
-                    collided.when_pushed(tile)
+
+def try_move(tile: tiles.Tile, velocity):
+    position = tile.get_position()
+    next_position = correct_position(tile.get_next())
+
+    if world_tiles[next_position[0]][next_position[1]] is not None:
+        return world_tiles[next_position[0]][next_position[1]]
+    world_tiles[position[0]][position[1]] = None
+    world_tiles[next_position[0]][next_position[1]] = tile
+    return None
