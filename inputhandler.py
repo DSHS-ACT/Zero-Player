@@ -54,77 +54,79 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
     if key == glfw.KEY_U:
         configuration.is_wrapping = not configuration.is_wrapping
 
-    if key == glfw.KEY_MINUS:
-        configuration.show_debug_ui = not configuration.show_debug_ui
-
     if key == glfw.KEY_SLASH:
         configuration.show_help = not configuration.show_help
 
-    if key == glfw.KEY_P:
-        configuration.show_help = False
-        configuration.show_debug_ui = False
-        if not configuration.ticking:
-            configuration.show_placer = True
+    # 개발자 모드 전용 키바인드들
+    if configuration.dev_mode:
+        if key == glfw.KEY_MINUS:
+            configuration.show_debug_ui = not configuration.show_debug_ui
 
-    if key == glfw.KEY_1:
-        if is_ctrl_pressed:
-            data.serialize(game.world_tiles, "1.map")
-        elif is_alt_pressed:
-            data.deserialize_to_world(game.world_tiles, "1.map")
+        if key == glfw.KEY_P:
+            configuration.show_help = False
+            configuration.show_debug_ui = False
+            if not configuration.ticking:
+                configuration.show_placer = True
 
-    if key == glfw.KEY_2:
-        if is_ctrl_pressed:
-            data.serialize(game.world_tiles, "2.map")
-        elif is_alt_pressed:
-            data.deserialize_to_world(game.world_tiles, "2.map")
+        if key == glfw.KEY_1:
+            if is_ctrl_pressed:
+                data.serialize(game.world_tiles, "1.map")
+            elif is_alt_pressed:
+                data.deserialize_to_world(game.world_tiles, "1.map")
 
-    if key == glfw.KEY_3:
-        if is_ctrl_pressed:
-            data.serialize(game.world_tiles, "3.map")
-        elif is_alt_pressed:
-            data.deserialize_to_world(game.world_tiles, "3.map")
+        if key == glfw.KEY_2:
+            if is_ctrl_pressed:
+                data.serialize(game.world_tiles, "2.map")
+            elif is_alt_pressed:
+                data.deserialize_to_world(game.world_tiles, "2.map")
 
-    if key == glfw.KEY_4:
-        if is_ctrl_pressed:
-            data.serialize(game.world_tiles, "4.map")
-        elif is_alt_pressed:
-            data.deserialize_to_world(game.world_tiles, "4.map")
+        if key == glfw.KEY_3:
+            if is_ctrl_pressed:
+                data.serialize(game.world_tiles, "3.map")
+            elif is_alt_pressed:
+                data.deserialize_to_world(game.world_tiles, "3.map")
 
-    if key == glfw.KEY_5:
-        if is_ctrl_pressed:
-            data.serialize(game.world_tiles, "5.map")
-        elif is_alt_pressed:
-            data.deserialize_to_world(game.world_tiles, "5.map")
+        if key == glfw.KEY_4:
+            if is_ctrl_pressed:
+                data.serialize(game.world_tiles, "4.map")
+            elif is_alt_pressed:
+                data.deserialize_to_world(game.world_tiles, "4.map")
 
-    if key == glfw.KEY_6:
-        if is_ctrl_pressed:
-            data.serialize(game.world_tiles, "6.map")
-        elif is_alt_pressed:
-            data.deserialize_to_world(game.world_tiles, "6.map")
+        if key == glfw.KEY_5:
+            if is_ctrl_pressed:
+                data.serialize(game.world_tiles, "5.map")
+            elif is_alt_pressed:
+                data.deserialize_to_world(game.world_tiles, "5.map")
 
-    if key == glfw.KEY_7:
-        if is_ctrl_pressed:
-            data.serialize(game.world_tiles, "7.map")
-        elif is_alt_pressed:
-            data.deserialize_to_world(game.world_tiles, "7.map")
+        if key == glfw.KEY_6:
+            if is_ctrl_pressed:
+                data.serialize(game.world_tiles, "6.map")
+            elif is_alt_pressed:
+                data.deserialize_to_world(game.world_tiles, "6.map")
 
-    if key == glfw.KEY_8:
-        if is_ctrl_pressed:
-            data.serialize(game.world_tiles, "8.map")
-        elif is_alt_pressed:
-            data.deserialize_to_world(game.world_tiles, "8.map")
+        if key == glfw.KEY_7:
+            if is_ctrl_pressed:
+                data.serialize(game.world_tiles, "7.map")
+            elif is_alt_pressed:
+                data.deserialize_to_world(game.world_tiles, "7.map")
 
-    if key == glfw.KEY_9:
-        if is_ctrl_pressed:
-            data.serialize(game.world_tiles, "9.map")
-        elif is_alt_pressed:
-            data.deserialize_to_world(game.world_tiles, "9.map")
+        if key == glfw.KEY_8:
+            if is_ctrl_pressed:
+                data.serialize(game.world_tiles, "8.map")
+            elif is_alt_pressed:
+                data.deserialize_to_world(game.world_tiles, "8.map")
 
-    if key == glfw.KEY_0:
-        if is_ctrl_pressed:
-            data.serialize(game.world_tiles, "0.map")
-        elif is_alt_pressed:
-            data.deserialize_to_world(game.world_tiles, "0.map")
+        if key == glfw.KEY_9:
+            if is_ctrl_pressed:
+                data.serialize(game.world_tiles, "9.map")
+            elif is_alt_pressed:
+                data.deserialize_to_world(game.world_tiles, "9.map")
+
+        if key == glfw.KEY_0:
+            if is_ctrl_pressed:
+                data.serialize(game.world_tiles, "0.map")
+            elif is_alt_pressed:
+                data.deserialize_to_world(game.world_tiles, "0.map")
 
 """
 ZPG 의 마우스 핸들러
@@ -153,8 +155,8 @@ def on_mouse(window, button: int, action: int, mods: int):
     print("위치: (" + str(monitor_x) + ", " + str(monitor_y) + ")")
     print("타일: (" + str(world_x) + ", " + str(world_y) + ")")
     if is_press:
+        clicked_tile = game.world_tiles[world_x][world_y]
         if is_left:
-            clicked_tile = game.world_tiles[world_x][world_y]
             if clicked_tile is None:
                 if game.holding is not None:
                     game.world_tiles[world_x][world_y] = game.holding
@@ -165,7 +167,10 @@ def on_mouse(window, button: int, action: int, mods: int):
                     game.world_tiles[world_x][world_y] = None
         else:
             if game.holding is None:
-                game.world_tiles[world_x][world_y] = None
+                if clicked_tile is not None:
+                    game.world_tiles[world_x][world_y] = None
+                else:
+                    game.allowed_tiles[world_x][world_y] = not game.allowed_tiles[world_x][world_y]
 
 """
 마우스 휠 핸들러

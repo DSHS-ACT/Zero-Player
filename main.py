@@ -7,7 +7,6 @@ from OpenGL.GL import *
 from imgui.integrations.glfw import GlfwRenderer
 
 import inputhandler
-from enums import *
 from global_variables import configuration
 from index_buffer import IndexBuffer
 from renderer import Renderer
@@ -149,6 +148,7 @@ def show_help():
     imgui.text("게임 속도 가속: L")
     imgui.text("엔티티 배치 메뉴: P")
     imgui.text("시뮬레이션 시작: SPACE")
+    imgui.text("개발자 모드 활성화/비활성화: D")
     imgui.end()
 
 

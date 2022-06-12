@@ -8,6 +8,7 @@ class Global:
         self.show_debug_ui = False
         self.show_help = False
         self.show_placer = False
+        self.dev_mode = True
 
 
 configuration = Global()
