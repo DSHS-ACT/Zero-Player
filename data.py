@@ -58,6 +58,13 @@ def deserialize_to_world(world, file_path: str):
                 is_fixed = False
             tile.direction = direction
             tile.is_fixed = is_fixed
+        elif split[2] == "star":
+            tile = Star(Texture.STAR)
+            if split[3] == "FIXED":
+                is_fixed = True
+            else:
+                is_fixed = False
+            tile.is_fixed = is_fixed
 
         assert tile is not None
         world[x][y] = tile
