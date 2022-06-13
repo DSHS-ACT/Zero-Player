@@ -9,7 +9,7 @@ uniform int holding;
 uniform vec2 mouse_pos;
 
 void drawLines(vec2 coordinate);
-void draw_texture(int slot, vec2 coordinate);
+void draw_texture(int slot, vec2 coordinate, bool is_fixed);
 void draw_holding(int slot, vec2 mouse_pos, vec2 texture_coordinate, vec2 screen_coordinate, vec2 mapped_texCoord);
 vec2 rotate_vec2(int direction, vec2 to_rotate);
 
@@ -26,12 +26,13 @@ void main() {
 
     vec2 mapped_texCoord = vec2(frag_texCoord.x * 32, frag_texCoord.y * 18);
 
-    int texture_number = 31 & world[tile_index];
-    int direction = 3 & (world[tile_index] >> 5);
+    int texture_number = 31 & world[tile_index]; //5
+    int direction = 3 & (world[tile_index] >> 5); //2
+    bool is_fixed = 1 == (1 & (world[tile_index] >> 7)); //1
 
     vec2 transformed_coord = rotate_vec2(direction, mapped_texCoord);
 
-    draw_texture(texture_number, transformed_coord);
+    draw_texture(texture_number, transformed_coord, is_fixed);
 
     drawLines(coord);
 
@@ -53,7 +54,7 @@ vec2 rotate_vec2(int direction, vec2 to_rotate) {
     return vec2(0, 0);
 }
 
-void draw_texture(int slot, vec2 coordinate) {
+void draw_texture(int slot, vec2 coordinate, bool is_fixed) {
     if (slot == 0) color = texture(tiles[0], coordinate);
     if (slot == 1) color = texture(tiles[1], coordinate);
     if (slot == 2) color = texture(tiles[2], coordinate);
@@ -86,6 +87,10 @@ void draw_texture(int slot, vec2 coordinate) {
     if (slot == 29) color = texture(tiles[29], coordinate);
     if (slot == 30) color = texture(tiles[30], coordinate);
     if (slot == 31) color = texture(tiles[31], coordinate);
+
+    if (is_fixed) {
+        color = color * 0.8;
+    }
 }
 
 void drawLines(vec2 coordinate){
@@ -105,9 +110,10 @@ void draw_holding(int holding, vec2 mouse_pos, vec2 texture_coordinate, vec2 scr
 
     int texture_number = 31 & holding;
     int direction = 3 & (holding >> 5);
+    bool is_fixed = 1 == (1 & (holding >> 7));
 
     vec2 mouse_transformed_coordinate =
         vec2(mapped_texCoord.x - (mouse_pos.x / 60), mapped_texCoord.y + (mouse_pos.y / 60));
     vec2 transformed_coordinate = rotate_vec2(direction, mouse_transformed_coordinate);
-    draw_texture(texture_number, transformed_coordinate + vec2(0.5, 0.5));
+    draw_texture(texture_number, transformed_coordinate + vec2(0.5, 0.5), is_fixed);
 }

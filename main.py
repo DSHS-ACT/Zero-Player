@@ -174,6 +174,12 @@ def show_placer():
 
     imgui.begin("타일 배치 메뉴")
     imgui.text("화살표 타일은, 방향키를 누루면서 클릭하여 화살표의 방향을 지정할 수 있습니다")
+    if configuration.is_holding_fixed:
+        text = "타일 이동 가능: OFF"
+    else:
+        text = "타일 이동 가능: ON"
+    if imgui.button(text):
+        configuration.is_holding_fixed = not configuration.is_holding_fixed
     if imgui.image_button(Texture.ARROW.id, 120, 120, (0, 1), (1, 0)):
         arrow = Arrow(Texture.ARROW)
 
@@ -190,19 +196,11 @@ def show_placer():
             direction = enums.UP
         arrow.direction = direction
         game.holding = arrow
-    if imgui.image_button(Texture.SUICIDE.id, 120, 120, (0, 1), (1, 0)):
-        suicide = Suicide(Texture.SUICIDE)
-        game.holding = suicide
-    if imgui.image_button(Texture.LAVA.id, 120, 120, (0, 1), (1, 0)):
-        lava = Lava(Texture.LAVA)
-        game.holding = lava
-    if imgui.image_button(Texture.WALL.id, 120, 120, (0, 1), (1, 0)):
-        wall = Wall(Texture.WALL)
-        game.holding = wall
-    if imgui.image_button(Texture.PUSHABLE.id, 120, 120, (0, 1), (1, 0)):
-        tile = Pushable(Texture.PUSHABLE)
-        game.holding = tile
-
+        arrow.is_fixed = configuration.is_holding_fixed
+    placer_entry(Texture.SUICIDE, Suicide)
+    placer_entry(Texture.LAVA, Lava)
+    placer_entry(Texture.WALL, Wall)
+    placer_entry(Texture.PUSHABLE, Pushable)
     placer_entry(Texture.DIRECTIONAL, Directional)
     placer_entry(Texture.STAR, Star)
     imgui.end()
@@ -211,6 +209,7 @@ def placer_entry(texture, tile_class):
     if imgui.image_button(texture.id, 120, 120, (0, 1), (1, 0)):
         tile = tile_class(texture)
         game.holding = tile
+        tile.is_fixed = configuration.is_holding_fixed
 
 def main():
     print("PID:", os.getpid())

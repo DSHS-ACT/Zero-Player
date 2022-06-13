@@ -57,6 +57,13 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
     if key == glfw.KEY_SLASH:
         configuration.show_help = not configuration.show_help
 
+    if key == glfw.KEY_D:
+        configuration.dev_mode = not configuration.dev_mode
+        if not configuration.dev_mode:
+            configuration.show_placer = False
+            configuration.show_debug_ui = False
+            game.holding = None
+
     # 개발자 모드 전용 키바인드들
     if configuration.dev_mode:
         if key == glfw.KEY_MINUS:
@@ -163,14 +170,12 @@ def on_mouse(window, button: int, action: int, mods: int):
                     game.holding = None
             else:
                 if game.holding is None:
-                    game.holding = clicked_tile
-                    game.world_tiles[world_x][world_y] = None
+                    if configuration.dev_mode or not clicked_tile.is_fixed:
+                        game.holding = clicked_tile
+                        game.world_tiles[world_x][world_y] = None
         else:
             if game.holding is None:
-                if clicked_tile is not None:
-                    game.world_tiles[world_x][world_y] = None
-                else:
-                    game.allowed_tiles[world_x][world_y] = not game.allowed_tiles[world_x][world_y]
+                game.world_tiles[world_x][world_y] = None
 
 """
 마우스 휠 핸들러

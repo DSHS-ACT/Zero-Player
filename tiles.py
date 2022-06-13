@@ -27,6 +27,7 @@ class Tile:
         # 이를 사용하여 생성된 타일들을 구분한다.
         self.uuid = uuid.uuid4()
         self.is_alive = True
+        self.is_fixed = False
 
     # 해당 타일의 위치를 받아오는 함수. 타일은 위치 데이터를 가지고 있지 않기에 UUID 를 비교하여야 한다.
     def get_position(self):
@@ -55,8 +56,11 @@ class Tile:
         if self is None:
             return Texture.EMPTY.slot
         else:
-            element = self.texture.slot
-            element += self.direction << 5
+            element = self.texture.slot  # 5
+            element += self.direction << 5  # 2
+            if self.is_fixed:  # 1
+                element += (1 << 7)
+            # print("{0:b}".format(element))
             return element
 
     def get_next(self):
@@ -174,6 +178,11 @@ class Directional(Tile):
         position = self.get_position()
         return str(position[0]) + " " + str(position[1]) + " directional " + str(self.direction)
 
+
 class Star(Tile):
     def when_pushed(self, other):
         self.is_alive = False
+
+class Mine(Tile):
+    def when_pushed(self, other):
+        pass

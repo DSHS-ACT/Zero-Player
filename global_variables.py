@@ -9,6 +9,7 @@ class Global:
         self.show_help = False
         self.show_placer = False
         self.dev_mode = True
+        self.is_holding_fixed = False
 
 
 configuration = Global()
