@@ -70,11 +70,11 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
             configuration.show_debug_ui = not configuration.show_debug_ui
 
         if key == glfw.KEY_P:
-            game.play_sound("menu.mp3")
+            game.play_wav("menu.wav")
             configuration.show_help = False
             configuration.show_debug_ui = False
             if not configuration.ticking:
-                configuration.show_placer = True
+                configuration.show_placer = not configuration.show_placer
 
         if key == glfw.KEY_1:
             if is_ctrl_pressed:

@@ -3,9 +3,8 @@ import numpy as np
 from main import configuration
 import tiles
 from texture import Texture
-from pydub import AudioSegment
-from pydub.playback import play
 import threading
+import simpleaudio as sa
 
 world_tiles = np.empty((32, 18), dtype=Texture)
 
@@ -73,7 +72,7 @@ def try_move(tile: tiles.Tile):
     world_tiles[next_position[0]][next_position[1]] = tile
     return None
 
-def play_sound(path: str):
-    song = AudioSegment.from_mp3(path)
-    player = threading.Thread(target=play, args=(song,))
-    player.start()
+
+def play_wav(path: str):
+    player = sa.WaveObject.from_wave_file(path)
+    player.play()

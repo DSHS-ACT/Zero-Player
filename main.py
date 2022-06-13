@@ -197,10 +197,14 @@ def show_placer():
         arrow.direction = direction
         game.holding = arrow
         arrow.is_fixed = configuration.is_holding_fixed
+    imgui.same_line()
     placer_entry(Texture.SUICIDE, Suicide)
+    imgui.same_line()
     placer_entry(Texture.LAVA, Lava)
     placer_entry(Texture.WALL, Wall)
+    imgui.same_line()
     placer_entry(Texture.PUSHABLE, Pushable)
+    imgui.same_line()
     placer_entry(Texture.DIRECTIONAL, Directional)
     placer_entry(Texture.STAR, Star)
     imgui.end()
