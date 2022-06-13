@@ -3,3 +3,4 @@ glfw
 numpy
 imageio
 imgui[glfw]
+pydub

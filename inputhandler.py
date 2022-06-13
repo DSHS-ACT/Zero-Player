@@ -70,6 +70,7 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
             configuration.show_debug_ui = not configuration.show_debug_ui
 
         if key == glfw.KEY_P:
+            game.play_sound("menu.mp3")
             configuration.show_help = False
             configuration.show_debug_ui = False
             if not configuration.ticking:

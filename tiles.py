@@ -75,13 +75,13 @@ class Arrow(Tile):
     def tick(self, x, y):
         self.velocity = direction_to_velocity(self.direction)
 
-        move_result = game.try_move(self, self.velocity)
+        move_result = game.try_move(self)
         if move_result is not None:
             move_result.when_pushed(self)
             if isinstance(move_result, Pushable)\
                     or isinstance(move_result, Directional)\
                     or isinstance(move_result, Star):
-                game.try_move(self, self.velocity)
+                game.try_move(self)
             else:
                 self.pushing(move_result)
 
@@ -141,7 +141,7 @@ class Pushable(Tile):
         if at_next is not None:
             at_next.when_pushed(self)
         if game.world_tiles[next_position[0]][next_position[1]] is None:
-            game.try_move(self, self.velocity)
+            game.try_move(self)
 
     def serialize(self):
         position = self.get_position()
@@ -172,7 +172,7 @@ class Directional(Tile):
         if at_next is not None:
             at_next.when_pushed(self)
         if game.world_tiles[next_position[0]][next_position[1]] is None:
-            game.try_move(self, self.velocity)
+            game.try_move(self)
 
     def serialize(self):
         position = self.get_position()

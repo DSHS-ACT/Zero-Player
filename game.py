@@ -3,6 +3,9 @@ import numpy as np
 from main import configuration
 import tiles
 from texture import Texture
+from pydub import AudioSegment
+from pydub.playback import play
+import threading
 
 world_tiles = np.empty((32, 18), dtype=Texture)
 
@@ -60,7 +63,7 @@ def tick():
         world_tiles[position[0]][position[1]] = None
 
 
-def try_move(tile: tiles.Tile, velocity):
+def try_move(tile: tiles.Tile):
     position = tile.get_position()
     next_position = correct_position(tile.get_next())
 
@@ -69,3 +72,8 @@ def try_move(tile: tiles.Tile, velocity):
     world_tiles[position[0]][position[1]] = None
     world_tiles[next_position[0]][next_position[1]] = tile
     return None
+
+def play_sound(path: str):
+    song = AudioSegment.from_mp3(path)
+    player = threading.Thread(target=play, args=(song,))
+    player.start()
