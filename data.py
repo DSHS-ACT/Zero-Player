@@ -15,19 +15,49 @@ def deserialize_to_world(world, file_path: str):
         if split[2] == "arrow":
             tile = Arrow(Texture.ARROW)
             direction = int(split[3])
+            if split[4] == "FIXED":
+                is_fixed = True
+            else:
+                is_fixed = False
             tile.direction = direction
+            tile.is_fixed = is_fixed
         elif split[2] == "suicide":
             tile = Suicide(Texture.SUICIDE)
+            if split[3] == "FIXED":
+                is_fixed = True
+            else:
+                is_fixed = False
+            tile.is_fixed = is_fixed
         elif split[2] == "lava":
             tile = Lava(Texture.LAVA)
+            if split[3] == "FIXED":
+                is_fixed = True
+            else:
+                is_fixed = False
+            tile.is_fixed = is_fixed
         elif split[2] == "wall":
             tile = Wall(Texture.WALL)
+            if split[3] == "FIXED":
+                is_fixed = True
+            else:
+                is_fixed = False
+            tile.is_fixed = is_fixed
         elif split[2] == "pushable":
             tile = Pushable(Texture.PUSHABLE)
+            if split[3] == "FIXED":
+                is_fixed = True
+            else:
+                is_fixed = False
+            tile.is_fixed = is_fixed
         elif split[2] == "directional":
             tile = Directional(Texture.DIRECTIONAL)
             direction = int(split[3])
+            if split[4] == "FIXED":
+                is_fixed = True
+            else:
+                is_fixed = False
             tile.direction = direction
+            tile.is_fixed = is_fixed
 
         assert tile is not None
         world[x][y] = tile

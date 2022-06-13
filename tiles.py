@@ -92,7 +92,11 @@ class Arrow(Tile):
 
     def serialize(self):
         position = self.get_position()
-        return str(position[0]) + " " + str(position[1]) + " arrow " + str(self.direction)
+        if self.is_fixed:
+            fixed = "FIXED"
+        else:
+            fixed = "MOVABLE"
+        return f"{position[0]} {position[1]} arrow {self.direction} {fixed}"
 
 
 class Suicide(Tile):
@@ -102,7 +106,11 @@ class Suicide(Tile):
 
     def serialize(self):
         position = self.get_position()
-        return str(position[0]) + " " + str(position[1]) + " suicide"
+        if self.is_fixed:
+            fixed = "FIXED"
+        else:
+            fixed = "MOVABLE"
+        return f"{position[0]} {position[1]} suicided {fixed}"
 
 
 class Lava(Tile):
@@ -111,13 +119,21 @@ class Lava(Tile):
 
     def serialize(self):
         position = self.get_position()
-        return str(position[0]) + " " + str(position[1]) + " lava"
+        if self.is_fixed:
+            fixed = "FIXED"
+        else:
+            fixed = "MOVABLE"
+        return f"{position[0]} {position[1]} lava {fixed}"
 
 
 class Wall(Tile):
     def serialize(self):
         position = self.get_position()
-        return str(position[0]) + " " + str(position[1]) + " wall"
+        if self.is_fixed:
+            fixed = "FIXED"
+        else:
+            fixed = "MOVABLE"
+        return f"{position[0]} {position[1]} wall {fixed}"
 
 
 class Pushable(Tile):
@@ -145,7 +161,11 @@ class Pushable(Tile):
 
     def serialize(self):
         position = self.get_position()
-        return str(position[0]) + " " + str(position[1]) + " pushable"
+        if self.is_fixed:
+            fixed = "FIXED"
+        else:
+            fixed = "MOVABLE"
+        return f"{position[0]} {position[1]} pushable {fixed}"
 
 
 class Directional(Tile):
@@ -176,13 +196,33 @@ class Directional(Tile):
 
     def serialize(self):
         position = self.get_position()
-        return str(position[0]) + " " + str(position[1]) + " directional " + str(self.direction)
+        if self.is_fixed:
+            fixed = "FIXED"
+        else:
+            fixed = "MOVABLE"
+        return f"{position[0]} {position[1]} directional {self.direction} {fixed}"
 
 
 class Star(Tile):
     def when_pushed(self, other):
         self.is_alive = False
 
+    def serialize(self):
+        position = self.get_position()
+        if self.is_fixed:
+            fixed = "FIXED"
+        else:
+            fixed = "MOVABLE"
+        return f"{position[0]} {position[1]} star {fixed}"
+
 class Mine(Tile):
     def when_pushed(self, other):
         pass
+
+    def serialize(self):
+        position = self.get_position()
+        if self.is_fixed:
+            fixed = "FIXED"
+        else:
+            fixed = "MOVABLE"
+        return f"{position[0]} {position[1]} mine {fixed}"
