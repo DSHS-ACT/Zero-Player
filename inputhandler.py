@@ -48,7 +48,11 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
 
     if key == glfw.KEY_SPACE:
         if game.holding is None:
-            configuration.ticking = not configuration.ticking
+            if configuration.stage_tracker is None:
+                configuration.ticking = not configuration.ticking
+            else:
+                configuration.ticking = True
+                configuration.stage_tracker.about_to_start(game.world_tiles)
             configuration.show_placer = False
 
     if key == glfw.KEY_U:
@@ -57,18 +61,11 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
     if key == glfw.KEY_SLASH:
         configuration.show_help = not configuration.show_help
 
-    if key == glfw.KEY_D:
-        configuration.dev_mode = not configuration.dev_mode
-        if not configuration.dev_mode:
-            configuration.show_placer = False
-            configuration.show_debug_ui = False
-            game.holding = None
-
     if key == glfw.KEY_S:
         configuration.show_stage_picker = not configuration.show_stage_picker
 
     # 개발자 모드 전용 키바인드들
-    if configuration.dev_mode:
+    if configuration.stage_tracker is None:
         if key == glfw.KEY_MINUS:
             configuration.show_debug_ui = not configuration.show_debug_ui
 
@@ -174,7 +171,7 @@ def on_mouse(window, button: int, action: int, mods: int):
                     game.holding = None
             else:
                 if game.holding is None:
-                    if configuration.dev_mode or not clicked_tile.is_fixed:
+                    if configuration.stage_tracker is None or not clicked_tile.is_fixed:
                         game.holding = clicked_tile
                         game.world_tiles[world_x][world_y] = None
         else:

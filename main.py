@@ -127,6 +127,9 @@ def init_window():
             show_placer()
         if configuration.show_stage_picker:
             show_stage_picker()
+        if configuration.stage_tracker is not None:
+            if configuration.stage_tracker.cleared:
+                configuration.stage_tracker.display_cleared_gui(imgui)
 
         imgui.render()
         impl.render(imgui.get_draw_data())
@@ -216,15 +219,17 @@ def show_placer():
     imgui.end()
 
 def show_stage_picker():
-    if imgui.button("test"):
-        copied = deepcopy(game.world_tiles)
-        print(copied)
+    if configuration.stage_tracker is None:
+        dev_mode_text = "개발 모드 활성화됨"
+    else:
+        dev_mode_text = "개발 모드 비활성화됨"
+    if imgui.button(dev_mode_text):
+        configuration.stage_tracker = None
 
     if imgui.button("스테이지 1"):
         close_all()
         game.clear_level()
         data.deserialize_to_world(game.world_tiles, "1.map")
-        configuration.dev_mode = False
         configuration.stage_tracker = Stage1(game.world_tiles)
 
     imgui.same_line()

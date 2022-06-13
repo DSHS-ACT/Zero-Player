@@ -73,6 +73,7 @@ def play_wav(path: str):
     player.play()
 
 def clear_level():
+    configuration.ticking = False
     for x in range(0, 32):
         for y in range(0, 18):
             world_tiles[x][y] = None

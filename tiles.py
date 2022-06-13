@@ -206,6 +206,7 @@ class Directional(Tile):
 class Star(Tile):
     def when_pushed(self, other):
         self.is_alive = False
+        game.configuration.stage_tracker.get_star()
 
     def serialize(self):
         position = self.get_position()
