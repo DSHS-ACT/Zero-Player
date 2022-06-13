@@ -64,6 +64,9 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
             configuration.show_debug_ui = False
             game.holding = None
 
+    if key == glfw.KEY_S:
+        configuration.show_stage_picker = not configuration.show_stage_picker
+
     # 개발자 모드 전용 키바인드들
     if configuration.dev_mode:
         if key == glfw.KEY_MINUS:

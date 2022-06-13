@@ -1,12 +1,10 @@
 import numpy as np
 
-from main import configuration
-import tiles
+from global_variables import configuration
 from texture import Texture
-import threading
 import simpleaudio as sa
 
-world_tiles = np.empty((32, 18), dtype=Texture)
+world_tiles = np.empty((32, 18), dtype=np.object)
 
 # 현재 마우스에 잡고 있는 타일
 holding = None
@@ -29,11 +27,8 @@ world 배열을 GPU에 알맞은 형태로 가공하는 함수
 """
 def get_gpu_world():
     # GPU 에 보낼 숫자 버퍼 미리 마련
-    processor = np.vectorize(tiles.Tile.to_int)
-    to_send = processor(world_tiles)
-
-    return to_send.flatten(order="F")
-
+    flattened = world_tiles.flatten(order="F")
+    return list(map(lambda tile: tile.to_int() if (tile is not None) else Texture.EMPTY.slot, flattened))
 
 """
 월드의 시간을 진행시키는 함수
@@ -62,7 +57,7 @@ def tick():
         world_tiles[position[0]][position[1]] = None
 
 
-def try_move(tile: tiles.Tile):
+def try_move(tile):
     position = tile.get_position()
     next_position = correct_position(tile.get_next())
 
@@ -76,3 +71,8 @@ def try_move(tile: tiles.Tile):
 def play_wav(path: str):
     player = sa.WaveObject.from_wave_file(path)
     player.play()
+
+def clear_level():
+    for x in range(0, 32):
+        for y in range(0, 18):
+            world_tiles[x][y] = None

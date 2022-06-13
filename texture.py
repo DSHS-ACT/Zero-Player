@@ -50,6 +50,9 @@ class Texture:
         glBindTexture(GL_TEXTURE_2D, 0)
         self.slot = -1
 
+    def __deepcopy__(self, memodict={}):
+        return self
+
     # 클래스를 등록하고 텍스처 리스트를 구성하는 함수
     @staticmethod
     def create_textures():

@@ -6,15 +6,18 @@ import numpy as np
 from OpenGL.GL import *
 from imgui.integrations.glfw import GlfwRenderer
 
+import data
 import inputhandler
 from global_variables import configuration
 from index_buffer import IndexBuffer
 from renderer import Renderer
 from shader import Shader
+from stage_tracker import Stage1
 from tiles import *
 from vertex_array import VertexArray
 from vertex_buffer import VertexBuffer
 from vertex_buffer_layout import VertexBufferLayout
+from copy import deepcopy
 
 window = None
 
@@ -122,6 +125,8 @@ def init_window():
             show_help()
         if configuration.show_placer:
             show_placer()
+        if configuration.show_stage_picker:
+            show_stage_picker()
 
         imgui.render()
         impl.render(imgui.get_draw_data())
@@ -149,6 +154,7 @@ def show_help():
     imgui.text("엔티티 배치 메뉴: P")
     imgui.text("시뮬레이션 시작: SPACE")
     imgui.text("개발자 모드 활성화/비활성화: D")
+    imgui.text("스테이지 불러오기 메뉴: S")
     imgui.end()
 
 
@@ -208,6 +214,27 @@ def show_placer():
     placer_entry(Texture.DIRECTIONAL, Directional)
     placer_entry(Texture.STAR, Star)
     imgui.end()
+
+def show_stage_picker():
+    if imgui.button("test"):
+        copied = deepcopy(game.world_tiles)
+        print(copied)
+
+    if imgui.button("스테이지 1"):
+        close_all()
+        game.clear_level()
+        data.deserialize_to_world(game.world_tiles, "1.map")
+        configuration.dev_mode = False
+        configuration.stage_tracker = Stage1(game.world_tiles)
+
+    imgui.same_line()
+
+def close_all():
+    configuration.show_placer = False
+    game.holding = None
+    configuration.show_help = False
+    configuration.show_stage_picker = False
+    configuration.show_debug_ui = False
 
 def placer_entry(texture, tile_class):
     if imgui.image_button(texture.id, 120, 120, (0, 1), (1, 0)):

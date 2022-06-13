@@ -10,6 +10,8 @@ class Global:
         self.show_placer = False
         self.dev_mode = True
         self.is_holding_fixed = False
+        self.stage_tracker = None
+        self.show_stage_picker = False
 
 
 configuration = Global()
