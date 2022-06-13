@@ -110,7 +110,7 @@ class Suicide(Tile):
             fixed = "FIXED"
         else:
             fixed = "MOVABLE"
-        return f"{position[0]} {position[1]} suicided {fixed}"
+        return f"{position[0]} {position[1]} suicide {fixed}"
 
 
 class Lava(Tile):
