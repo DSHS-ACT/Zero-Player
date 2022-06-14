@@ -11,6 +11,7 @@ class Global:
         self.is_holding_fixed = False
         self.stage_tracker = None
         self.show_stage_picker = False
+        self.imgui_io = None
 
 
-configuration = Global()
+global_infos = Global()

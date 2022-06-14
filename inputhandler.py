@@ -2,8 +2,9 @@ from math import floor
 
 import glfw
 
+import enums
 import game
-from global_variables import configuration
+from global_variables import global_infos
 import data
 
 """
@@ -25,56 +26,56 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
     if key == glfw.KEY_L:
         index = 0
         for speed in allowed_speeds:
-            if speed == configuration.game_speed:
+            if speed == global_infos.game_speed:
                 break
             index += 1
             assert speed != allowed_speeds[-1]
 
         if index < len(allowed_speeds) - 1:
             index += 1
-        configuration.game_speed = allowed_speeds[index]
+        global_infos.game_speed = allowed_speeds[index]
 
     if key == glfw.KEY_K:
         index = 0
         for speed in allowed_speeds:
-            if speed == configuration.game_speed:
+            if speed == global_infos.game_speed:
                 break
             index += 1
             assert speed != allowed_speeds[-1]
 
         if index > 0:
             index -= 1
-        configuration.game_speed = allowed_speeds[index]
+        global_infos.game_speed = allowed_speeds[index]
 
     if key == glfw.KEY_SPACE:
         if game.holding is None:
-            if configuration.stage_tracker is None:
-                configuration.ticking = not configuration.ticking
+            if global_infos.stage_tracker is None:
+                global_infos.ticking = not global_infos.ticking
             else:
-                configuration.ticking = True
-                configuration.stage_tracker.about_to_start(game.world_tiles)
-            configuration.show_placer = False
+                global_infos.ticking = True
+                global_infos.stage_tracker.about_to_start(game.world_tiles)
+            global_infos.show_placer = False
 
     if key == glfw.KEY_U:
-        configuration.is_wrapping = not configuration.is_wrapping
+        global_infos.is_wrapping = not global_infos.is_wrapping
 
     if key == glfw.KEY_SLASH:
-        configuration.show_help = not configuration.show_help
+        global_infos.show_help = not global_infos.show_help
 
     if key == glfw.KEY_S:
-        configuration.show_stage_picker = not configuration.show_stage_picker
+        global_infos.show_stage_picker = not global_infos.show_stage_picker
 
     # 개발자 모드 전용 키바인드들
-    if configuration.stage_tracker is None:
+    if global_infos.stage_tracker is None:
         if key == glfw.KEY_MINUS:
-            configuration.show_debug_ui = not configuration.show_debug_ui
+            global_infos.show_debug_ui = not global_infos.show_debug_ui
 
         if key == glfw.KEY_P:
             game.play_wav("menu.wav")
-            configuration.show_help = False
-            configuration.show_debug_ui = False
-            if not configuration.ticking:
-                configuration.show_placer = not configuration.show_placer
+            global_infos.show_help = False
+            global_infos.show_debug_ui = False
+            if not global_infos.ticking:
+                global_infos.show_placer = not global_infos.show_placer
 
         if key == glfw.KEY_1:
             if is_ctrl_pressed:
@@ -136,6 +137,23 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
             elif is_alt_pressed:
                 data.deserialize_to_world(game.world_tiles, "0.map")
 
+        if key == glfw.KEY_UP:
+            if game.holding is not None:
+                game.holding.direction = enums.UP
+
+        if key == glfw.KEY_RIGHT:
+            if game.holding is not None:
+                game.holding.direction = enums.RIGHT
+
+        if key == glfw.KEY_DOWN:
+            if game.holding is not None:
+                game.holding.direction = enums.DOWN
+
+        if key == glfw.KEY_LEFT:
+            if game.holding is not None:
+                game.holding.direction = enums.LEFT
+
+
 """
 ZPG 의 마우스 핸들러
 button: 클릭된 마우스 키의 번호, glfw_MOUSE_BUTTON_LEFT 와 같은 값들과 비교하여 눌러진 마우스가 무엇인지 알아낼 수 있다
@@ -143,11 +161,11 @@ action: 마우스 행동 번호, 마우스가 "내려갔"는지, "올라갔"는�
 """
 def on_mouse(window, button: int, action: int, mods: int):
     # 게임 실행중에는 마우스 입력 무시
-    if configuration.ticking:
+    if global_infos.ticking:
         return
 
     # GUI 표시중에는 마우스 입력 무시
-    if configuration.show_help or configuration.show_debug_ui or configuration.show_placer:
+    if global_infos.imgui_io.want_capture_mouse:
         return
 
     # 왼쪽 버튼인가?
@@ -171,8 +189,9 @@ def on_mouse(window, button: int, action: int, mods: int):
                     game.holding = None
             else:
                 if game.holding is None:
-                    if configuration.stage_tracker is None or not clicked_tile.is_fixed:
+                    if global_infos.stage_tracker is None or not clicked_tile.is_fixed:
                         game.holding = clicked_tile
+                        game.holding.is_fixed = global_infos.is_holding_fixed
                         game.world_tiles[world_x][world_y] = None
         else:
             if game.holding is None:
@@ -189,8 +208,8 @@ def on_mouse(window, button: int, action: int, mods: int):
 """
 def on_mouse_wheel(window, x: float, y: float):
     if y > 0:
-        configuration.width += 0.5
+        global_infos.width += 0.5
     elif y < 0:
-        if configuration.width >= 1:
-            configuration.width -= 0.5
+        if global_infos.width >= 1:
+            global_infos.width -= 0.5
 

@@ -1,5 +1,5 @@
 from tiles import Star
-from global_variables import configuration
+from global_variables import global_infos
 from copy import deepcopy
 
 
@@ -26,7 +26,7 @@ class StageBase:
         assert self.stars > -1
         if self.stars == 0:
             self.cleared = True
-            configuration.ticking = False
+            global_infos.ticking = False
             self.score -= self.tick_count
             for later_x in range(0, 32):
                 for later_y in range(0, 18):
@@ -68,7 +68,7 @@ class StageBase:
         imgui.text(f"점수: {self.score}")
         if self.next_stage is not None:
             if imgui.button("다음 스테이지 불러오기"):
-                configuration.stage_tracker = self.next_stage()
+                global_infos.stage_tracker = self.next_stage()
         imgui.end()
 
 

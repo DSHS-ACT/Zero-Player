@@ -8,7 +8,7 @@ from imgui.integrations.glfw import GlfwRenderer
 
 import data
 import inputhandler
-from global_variables import configuration
+from global_variables import global_infos
 from index_buffer import IndexBuffer
 from renderer import Renderer
 from shader import Shader
@@ -17,7 +17,6 @@ from tiles import *
 from vertex_array import VertexArray
 from vertex_buffer import VertexBuffer
 from vertex_buffer_layout import VertexBufferLayout
-from copy import deepcopy
 
 window = None
 
@@ -68,11 +67,13 @@ def init_window():
     index_buffer = IndexBuffer(indices, 6)
 
     imgui.create_context()
-    io = imgui.get_io()
 
-    io.display_size = 100, 100
-    nanum_font = io.fonts.add_font_from_file_ttf("NanumSquareRoundR.ttf", 17, io.fonts.get_glyph_ranges_korean())
-    io.fonts.get_tex_data_as_rgba32()
+    global_infos.imgui_io = imgui.get_io()
+
+    global_infos.imgui_io.display_size = 100, 100
+    nanum_font = global_infos.imgui_io.fonts.add_font_from_file_ttf("NanumSquareRoundR.ttf", 17,
+                                                       global_infos.imgui_io.fonts.get_glyph_ranges_korean())
+    global_infos.imgui_io.fonts.get_tex_data_as_rgba32()
 
     impl = GlfwRenderer(window, False)
 
@@ -103,7 +104,7 @@ def init_window():
         imgui.new_frame()
 
         shader.bind()
-        shader.set_uniform1f("width", configuration.width)
+        shader.set_uniform1f("width", global_infos.width)
         shader.set_uniform1iv("world", 32 * 18, game.get_gpu_world())
         if game.holding is not None:
             shader.set_uniform1i("holding", game.holding.to_int())
@@ -115,21 +116,21 @@ def init_window():
 
         renderer.draw(vertex_array, index_buffer, shader)
 
-        configuration.frame_count += 1
-        if configuration.frame_count % (60 / configuration.game_speed) == 0:
+        global_infos.frame_count += 1
+        if global_infos.frame_count % (60 / global_infos.game_speed) == 0:
             game.tick()
 
-        if configuration.show_debug_ui:
+        if global_infos.show_debug_ui:
             debug_screen()
-        if configuration.show_help:
+        if global_infos.show_help:
             show_help()
-        if configuration.show_placer:
+        if global_infos.show_placer:
             show_placer()
-        if configuration.show_stage_picker:
+        if global_infos.show_stage_picker:
             show_stage_picker()
-        if configuration.stage_tracker is not None:
-            if configuration.stage_tracker.cleared:
-                configuration.stage_tracker.display_cleared_gui(imgui)
+        if global_infos.stage_tracker is not None:
+            if global_infos.stage_tracker.cleared:
+                global_infos.stage_tracker.display_cleared_gui(imgui)
 
         imgui.render()
         impl.render(imgui.get_draw_data())
@@ -163,8 +164,8 @@ def show_help():
 
 def debug_screen():
     imgui.begin("제로 플레이어 게임 디버그 UI")
-    imgui.text("게임 속도: " + str(configuration.game_speed) + " x")
-    if configuration.is_wrapping:
+    imgui.text("게임 속도: " + str(global_infos.game_speed) + " x")
+    if global_infos.is_wrapping:
         imgui.text("월드 테두리 이어 붙임")
     else:
         imgui.text("월드 테두리 이어 붙이지 않음")
@@ -177,18 +178,14 @@ def debug_screen():
 
 
 def show_placer():
-    if game.holding is not None:
-        configuration.show_placer = False
-        return
-
     imgui.begin("타일 배치 메뉴")
     imgui.text("화살표 타일은, 방향키를 누루면서 클릭하여 화살표의 방향을 지정할 수 있습니다")
-    if configuration.is_holding_fixed:
+    if global_infos.is_holding_fixed:
         text = "타일 이동 가능: OFF"
     else:
         text = "타일 이동 가능: ON"
     if imgui.button(text):
-        configuration.is_holding_fixed = not configuration.is_holding_fixed
+        global_infos.is_holding_fixed = not global_infos.is_holding_fixed
     if imgui.image_button(Texture.ARROW.id, 120, 120, (0, 1), (1, 0)):
         arrow = Arrow(Texture.ARROW)
 
@@ -205,7 +202,7 @@ def show_placer():
             direction = enums.UP
         arrow.direction = direction
         game.holding = arrow
-        arrow.is_fixed = configuration.is_holding_fixed
+        arrow.is_fixed = global_infos.is_holding_fixed
     imgui.same_line()
     placer_entry(Texture.SUICIDE, Suicide)
     imgui.same_line()
@@ -218,36 +215,39 @@ def show_placer():
     placer_entry(Texture.STAR, Star)
     imgui.same_line()
     placer_entry(Texture.MINE, Mine)
+    imgui.same_line()
+    placer_entry(Texture.KEY, Key)
+    placer_entry(Texture.LOCK, Lock)
     imgui.end()
 
 def show_stage_picker():
-    if configuration.stage_tracker is None:
+    if global_infos.stage_tracker is None:
         dev_mode_text = "개발 모드 활성화됨"
     else:
         dev_mode_text = "개발 모드 비활성화됨"
     if imgui.button(dev_mode_text):
-        configuration.stage_tracker = None
+        global_infos.stage_tracker = None
 
     if imgui.button("스테이지 1"):
         close_all()
         game.clear_level()
         data.deserialize_to_world(game.world_tiles, "1.map")
-        configuration.stage_tracker = Stage1(game.world_tiles)
+        global_infos.stage_tracker = Stage1(game.world_tiles)
 
     imgui.same_line()
 
 def close_all():
-    configuration.show_placer = False
+    global_infos.show_placer = False
     game.holding = None
-    configuration.show_help = False
-    configuration.show_stage_picker = False
-    configuration.show_debug_ui = False
+    global_infos.show_help = False
+    global_infos.show_stage_picker = False
+    global_infos.show_debug_ui = False
 
 def placer_entry(texture, tile_class):
     if imgui.image_button(texture.id, 120, 120, (0, 1), (1, 0)):
         tile = tile_class(texture)
         game.holding = tile
-        tile.is_fixed = configuration.is_holding_fixed
+        tile.is_fixed = global_infos.is_holding_fixed
 
 def main():
     print("PID:", os.getpid())

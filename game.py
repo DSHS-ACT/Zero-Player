@@ -1,7 +1,7 @@
 import numpy as np
 
 import game
-from global_variables import configuration
+from global_variables import global_infos
 from texture import Texture
 import simpleaudio as sa
 
@@ -17,7 +17,7 @@ def clamp(num, min_value, max_value):
     return max(min(num, max_value), min_value)
 
 def correct_position(position):
-    if configuration.is_wrapping:
+    if global_infos.is_wrapping:
         next_position = position[0] % 32, position[1] % 18
     else:
         next_position = (clamp(position[0], 0, 31), clamp(position[1], 0, 17))
@@ -39,7 +39,7 @@ add_list = []
 기본적으론 60이다, 게임이 60프레임이니, 1초에 한번 발동된다.
 """
 def tick():
-    if not configuration.ticking:
+    if not global_infos.ticking:
         return
 
     ticked = []
@@ -56,9 +56,11 @@ def tick():
             tile.tick(x, y)
             ticked.append(tile)
 
-    for dead in filter(lambda tile: tile is not None and not tile.is_alive, world_tiles.flatten()):
-        position = dead.get_position()
-        world_tiles[position[0]][position[1]] = None
+    for x in range(0, 32):
+        for y in range(0, 18):
+            current = world_tiles[x][y]
+            if current is not None and not current.is_alive:
+                world_tiles[x][y] = None
 
     global add_list
 
@@ -70,8 +72,8 @@ def tick():
 
     add_list = []
 
-    if game.configuration.stage_tracker is not None:
-        game.configuration.stage_tracker.ticked()
+    if game.global_infos.stage_tracker is not None:
+        game.global_infos.stage_tracker.ticked()
 
 
 def try_move(tile):
@@ -90,7 +92,7 @@ def play_wav(path: str):
     player.play()
 
 def clear_level():
-    configuration.ticking = False
+    global_infos.ticking = False
     for x in range(0, 32):
         for y in range(0, 18):
             world_tiles[x][y] = None

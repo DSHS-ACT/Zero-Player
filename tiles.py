@@ -80,7 +80,8 @@ class Arrow(Tile):
             move_result.when_pushed(self)
             if isinstance(move_result, Pushable)\
                     or isinstance(move_result, Directional)\
-                    or isinstance(move_result, Star):
+                    or isinstance(move_result, Star)\
+                    or isinstance(move_result, Key):
                 game.try_move(self)
             else:
                 self.pushing(move_result)
@@ -206,8 +207,8 @@ class Directional(Tile):
 class Star(Tile):
     def when_pushed(self, other):
         self.is_alive = False
-        if game.configuration.stage_tracker is not None:
-            game.configuration.stage_tracker.get_star()
+        if game.global_infos.stage_tracker is not None:
+            game.global_infos.stage_tracker.get_star()
 
     def serialize(self):
         position = self.get_position()
@@ -229,8 +230,8 @@ class Mine(Tile):
                 corrected = game.correct_position((x, y))
                 existing = game.world_tiles[corrected[0]][corrected[1]]
                 if existing is not None and isinstance(existing, Star):
-                    if game.configuration.stage_tracker is not None:
-                        game.configuration.stage_tracker.get_star()
+                    if game.global_infos.stage_tracker is not None:
+                        game.global_infos.stage_tracker.get_star()
                 game.add_list.append((corrected[0], corrected[1], Explosion(Texture.EXPLOSION)))
         self.is_alive = False
 
@@ -255,3 +256,23 @@ class Explosion(Tile):
 
     def when_pushed(self, other):
         other.is_alive = False
+
+
+class Key(Tile):
+    def when_pushed(self, other):
+        for x in range(0, 32):
+            for y in range(0, 18):
+                current = game.world_tiles[x][y]
+                if current is not None and isinstance(current, Lock):
+                    current.is_alive = False
+        self.is_alive = False
+
+
+class Lock(Tile):
+    def serialize(self):
+        position = self.get_position()
+        if self.is_fixed:
+            fixed = "FIXED"
+        else:
+            fixed = "MOVABLE"
+        return f"{position[0]} {position[1]} lock {fixed}"
