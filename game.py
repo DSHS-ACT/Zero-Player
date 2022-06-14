@@ -1,5 +1,6 @@
 import numpy as np
 
+import game
 from global_variables import configuration
 from texture import Texture
 import simpleaudio as sa
@@ -30,6 +31,8 @@ def get_gpu_world():
     flattened = world_tiles.flatten(order="F")
     return list(map(lambda tile: tile.to_int() if (tile is not None) else Texture.EMPTY.slot, flattened))
 
+add_list = []
+
 """
 월드의 시간을 진행시키는 함수
 이 함수가 발동될 프레임 빈도는 L 또는 K 를 눌러 다음중 하나로 설정할 수 있다: [120, 60, 40, 30, 20, 15, 10, 5, 4, 3, 2]
@@ -40,6 +43,7 @@ def tick():
         return
 
     ticked = []
+
     for x in range(0, 32):
         for y in range(0, 18):
             tile = world_tiles[x][y]
@@ -55,6 +59,19 @@ def tick():
     for dead in filter(lambda tile: tile is not None and not tile.is_alive, world_tiles.flatten()):
         position = dead.get_position()
         world_tiles[position[0]][position[1]] = None
+
+    global add_list
+
+    for to_add in add_list:
+        x = to_add[0]
+        y = to_add[1]
+        tile = to_add[2]
+        world_tiles[x][y] = tile
+
+    add_list = []
+
+    if game.configuration.stage_tracker is not None:
+        game.configuration.stage_tracker.ticked()
 
 
 def try_move(tile):

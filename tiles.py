@@ -206,7 +206,8 @@ class Directional(Tile):
 class Star(Tile):
     def when_pushed(self, other):
         self.is_alive = False
-        game.configuration.stage_tracker.get_star()
+        if game.configuration.stage_tracker is not None:
+            game.configuration.stage_tracker.get_star()
 
     def serialize(self):
         position = self.get_position()
@@ -216,9 +217,22 @@ class Star(Tile):
             fixed = "MOVABLE"
         return f"{position[0]} {position[1]} star {fixed}"
 
+
 class Mine(Tile):
     def when_pushed(self, other):
-        pass
+        position = self.get_position()
+        up_left = position[0] - 1, position[1] - 1
+        for x in range(up_left[0], up_left[0] + 3):
+            for y in range(up_left[1], up_left[1] + 3):
+                if position == (x, y):
+                    continue
+                corrected = game.correct_position((x, y))
+                existing = game.world_tiles[corrected[0]][corrected[1]]
+                if existing is not None and isinstance(existing, Star):
+                    if game.configuration.stage_tracker is not None:
+                        game.configuration.stage_tracker.get_star()
+                game.add_list.append((corrected[0], corrected[1], Explosion(Texture.EXPLOSION)))
+        self.is_alive = False
 
     def serialize(self):
         position = self.get_position()
@@ -227,3 +241,17 @@ class Mine(Tile):
         else:
             fixed = "MOVABLE"
         return f"{position[0]} {position[1]} mine {fixed}"
+
+
+class Explosion(Tile):
+    def __init__(self, texture: Texture):
+        super().__init__(texture)
+        self.life = 0
+
+    def tick(self, x, y):
+        if self.life <= 0:
+            self.is_alive = False
+        self.life -= 1
+
+    def when_pushed(self, other):
+        other.is_alive = False

@@ -12,10 +12,14 @@ class StageBase:
         self.cleared = False
         self.score = 200
         self.next_stage = next_stage
+        self.tick_count = 0
         for x in range(0, 32):
             for y in range(0, 18):
                 if isinstance(self.original[x][y], Star):
                     self.stars += 1
+
+    def ticked(self):
+        self.tick_count += 1
 
     def get_star(self):
         self.stars -= 1
@@ -23,6 +27,7 @@ class StageBase:
         if self.stars == 0:
             self.cleared = True
             configuration.ticking = False
+            self.score -= self.tick_count
             for later_x in range(0, 32):
                 for later_y in range(0, 18):
                     current = self.snapshot_before_ticking[later_x][later_y]

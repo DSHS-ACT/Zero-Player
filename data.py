@@ -1,3 +1,4 @@
+import tiles
 from tiles import *
 from os.path import exists
 
@@ -65,7 +66,13 @@ def deserialize_to_world(world, file_path: str):
             else:
                 is_fixed = False
             tile.is_fixed = is_fixed
-
+        elif split[2] == "mine":
+            tile = Mine(Texture.MINE)
+            if split[3] == "FIXED":
+                is_fixed = True
+            else:
+                is_fixed = False
+            tile.is_fixed = is_fixed
         assert tile is not None
         world[x][y] = tile
 
@@ -74,5 +81,5 @@ def serialize(world, save_to: str):
         for x in range(0, 32):
             for y in range(0, 18):
                 tile = world[x][y]
-                if tile is not None:
+                if tile is not None and not isinstance(tile, tiles.Explosion):
                     output.write(tile.serialize() + "\n")

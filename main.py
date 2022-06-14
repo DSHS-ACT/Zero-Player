@@ -216,6 +216,8 @@ def show_placer():
     imgui.same_line()
     placer_entry(Texture.DIRECTIONAL, Directional)
     placer_entry(Texture.STAR, Star)
+    imgui.same_line()
+    placer_entry(Texture.MINE, Mine)
     imgui.end()
 
 def show_stage_picker():

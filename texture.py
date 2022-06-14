@@ -15,6 +15,8 @@ class Texture:
     PUSHABLE = None
     DIRECTIONAL = None
     STAR = None
+    MINE = None
+    EXPLOSION = None
 
     # 현재 게임에서 사용하는 텍스쳐들이 들어있는 리스트, create_texture 정적 함수가 호출되면 초기화된다
     TEXTURE_LIST = None
@@ -65,5 +67,8 @@ class Texture:
         Texture.PUSHABLE = Texture("pushable.png")
         Texture.DIRECTIONAL = Texture("directional.png")
         Texture.STAR = Texture("star.png")
+        Texture.MINE = Texture("mine.png")
+        Texture.EXPLOSION = Texture("explosion.png")
         Texture.TEXTURE_LIST = [Texture.EMPTY, Texture.ARROW, Texture.QUESTION, Texture.SUICIDE, Texture.LAVA,
-                                Texture.WALL, Texture.PUSHABLE, Texture.DIRECTIONAL, Texture.STAR]
+                                Texture.WALL, Texture.PUSHABLE, Texture.DIRECTIONAL, Texture.STAR, Texture.MINE,
+                                Texture.EXPLOSION]
