@@ -19,6 +19,8 @@ class Texture:
     EXPLOSION = None
     KEY = None
     LOCK = None
+    PORTAL_ORANGE = None
+    PORTAL_BLUE = None
 
     # 현재 게임에서 사용하는 텍스쳐들이 들어있는 리스트, create_texture 정적 함수가 호출되면 초기화된다
     TEXTURE_LIST = None
@@ -73,6 +75,9 @@ class Texture:
         Texture.EXPLOSION = Texture("explosion.png")
         Texture.KEY = Texture("key.png")
         Texture.LOCK = Texture("lock.png")
+        Texture.PORTAL_ORANGE = Texture("portal_orange.png")
+        Texture.PORTAL_BLUE = Texture("portal_blue.png")
         Texture.TEXTURE_LIST = [Texture.EMPTY, Texture.ARROW, Texture.QUESTION, Texture.SUICIDE, Texture.LAVA,
                                 Texture.WALL, Texture.PUSHABLE, Texture.DIRECTIONAL, Texture.STAR, Texture.MINE,
-                                Texture.EXPLOSION, Texture.KEY, Texture.LOCK]
+                                Texture.EXPLOSION, Texture.KEY, Texture.LOCK, Texture.PORTAL_ORANGE,
+                                Texture.PORTAL_BLUE]

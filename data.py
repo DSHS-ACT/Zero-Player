@@ -9,6 +9,8 @@ def deserialize_to_world(world, file_path: str):
     with open(file_path) as file:
         lines = [line.rstrip() for line in file]
 
+    portals_to_resolve = []
+
     for line in lines:
         split = line.split(" ")
         x = int(split[0])
@@ -73,8 +75,31 @@ def deserialize_to_world(world, file_path: str):
             else:
                 is_fixed = False
             tile.is_fixed = is_fixed
+        elif split[2] == "portal":
+            if split[4] == "orange":
+                tile = Portal(Texture.PORTAL_ORANGE)
+            else:
+                tile = Portal(Texture.PORTAL_BLUE)
+            if split[3] == "FIXED":
+                is_fixed = True
+            else:
+                is_fixed = False
+            tile.is_fixed = is_fixed
+            opposite_x = int(split[5])
+            opposite_y = int(split[6])
+
+            if world[opposite_x][opposite_y] is None:
+                portals_to_resolve.append(tile)
+            else:
+                opposite = world[opposite_x][opposite_y]
+                tile.opposite = opposite
+                opposite.opposite = tile
+                portals_to_resolve.remove(opposite)
+
         assert tile is not None
         world[x][y] = tile
+    if len(portals_to_resolve) != 0:
+        raise Exception("맵 파일에 끊어진 포탈이 있습니다!")
 
 def serialize(world, save_to: str):
     with open(save_to, 'w+') as output:
@@ -82,4 +107,6 @@ def serialize(world, save_to: str):
             for y in range(0, 18):
                 tile = world[x][y]
                 if tile is not None and not isinstance(tile, tiles.Explosion):
+                    if isinstance(tile, Portal) and tile.opposite is None:
+                        continue
                     output.write(tile.serialize() + "\n")

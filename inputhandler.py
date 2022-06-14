@@ -6,12 +6,15 @@ import enums
 import game
 from global_variables import global_infos
 import data
+from tiles import Portal
 
 """
 ZPG의 키보드 핸들러
 key: 눌러진 키의 번호, glfw.KEY_<키> 와 동일한지 비교하여 무슨 키가 눌러졌는지 확인할 수 있음.
 action: 키보드 행동 번호, 키보드가 "내려갔"는지, "올라갔"는지, 내려간 상태로 "유지되었"는지 확인할 수 있음
 """
+
+
 def on_key(window, key: int, scancode: int, action: int, mods: int):
     is_press = action == glfw.PRESS
     if not is_press:
@@ -49,6 +52,11 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
 
     if key == glfw.KEY_SPACE:
         if game.holding is None:
+            if game.unresolved_portal is not None:
+                position = game.unresolved_portal.get_position()
+                game.world_tiles[position[0]][position[1]] = None
+                game.unresolved_portal = None
+
             if global_infos.stage_tracker is None:
                 global_infos.ticking = not global_infos.ticking
             else:
@@ -81,60 +89,70 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
             if is_ctrl_pressed:
                 data.serialize(game.world_tiles, "1.map")
             elif is_alt_pressed:
+                game.clear_level()
                 data.deserialize_to_world(game.world_tiles, "1.map")
 
         if key == glfw.KEY_2:
             if is_ctrl_pressed:
                 data.serialize(game.world_tiles, "2.map")
             elif is_alt_pressed:
+                game.clear_level()
                 data.deserialize_to_world(game.world_tiles, "2.map")
 
         if key == glfw.KEY_3:
             if is_ctrl_pressed:
                 data.serialize(game.world_tiles, "3.map")
             elif is_alt_pressed:
+                game.clear_level()
                 data.deserialize_to_world(game.world_tiles, "3.map")
 
         if key == glfw.KEY_4:
             if is_ctrl_pressed:
                 data.serialize(game.world_tiles, "4.map")
             elif is_alt_pressed:
+                game.clear_level()
                 data.deserialize_to_world(game.world_tiles, "4.map")
 
         if key == glfw.KEY_5:
             if is_ctrl_pressed:
                 data.serialize(game.world_tiles, "5.map")
             elif is_alt_pressed:
+                game.clear_level()
                 data.deserialize_to_world(game.world_tiles, "5.map")
 
         if key == glfw.KEY_6:
             if is_ctrl_pressed:
                 data.serialize(game.world_tiles, "6.map")
             elif is_alt_pressed:
+                game.clear_level()
                 data.deserialize_to_world(game.world_tiles, "6.map")
 
         if key == glfw.KEY_7:
             if is_ctrl_pressed:
                 data.serialize(game.world_tiles, "7.map")
             elif is_alt_pressed:
+                game.clear_level()
                 data.deserialize_to_world(game.world_tiles, "7.map")
 
         if key == glfw.KEY_8:
             if is_ctrl_pressed:
                 data.serialize(game.world_tiles, "8.map")
             elif is_alt_pressed:
+                game.clear_level()
                 data.deserialize_to_world(game.world_tiles, "8.map")
 
         if key == glfw.KEY_9:
             if is_ctrl_pressed:
                 data.serialize(game.world_tiles, "9.map")
             elif is_alt_pressed:
+                game.clear_level()
                 data.deserialize_to_world(game.world_tiles, "9.map")
 
         if key == glfw.KEY_0:
             if is_ctrl_pressed:
                 data.serialize(game.world_tiles, "0.map")
             elif is_alt_pressed:
+                game.clear_level()
                 data.deserialize_to_world(game.world_tiles, "0.map")
 
         if key == glfw.KEY_UP:
@@ -159,6 +177,8 @@ ZPG 의 마우스 핸들러
 button: 클릭된 마우스 키의 번호, glfw_MOUSE_BUTTON_LEFT 와 같은 값들과 비교하여 눌러진 마우스가 무엇인지 알아낼 수 있다
 action: 마우스 행동 번호, 마우스가 "내려갔"는지, "올라갔"는지, 내려간 상태로 "유지되었"는지 확인할 수 있음
 """
+
+
 def on_mouse(window, button: int, action: int, mods: int):
     # 게임 실행중에는 마우스 입력 무시
     if global_infos.ticking:
@@ -186,16 +206,36 @@ def on_mouse(window, button: int, action: int, mods: int):
             if clicked_tile is None:
                 if game.holding is not None:
                     game.world_tiles[world_x][world_y] = game.holding
+                    if isinstance(game.holding, Portal):
+                        if game.unresolved_portal is None:
+                            game.unresolved_portal = game.holding
+                        else:
+                            if game.holding != game.unresolved_portal:
+                                game.unresolved_portal.opposite = game.holding
+                                game.holding.opposite = game.unresolved_portal
+                                game.unresolved_portal = None
                     game.holding = None
             else:
                 if game.holding is None:
                     if global_infos.stage_tracker is None or not clicked_tile.is_fixed:
                         game.holding = clicked_tile
+                        if isinstance(clicked_tile, Portal):
+                            if clicked_tile.opposite is not None:
+                                clicked_tile.opposite.opposite = None
+                                game.unresolved_portal = clicked_tile.opposite
+
                         game.holding.is_fixed = global_infos.is_holding_fixed
                         game.world_tiles[world_x][world_y] = None
         else:
             if game.holding is None:
+                to_delete = game.world_tiles[world_x][world_y]
+                if to_delete is not None:
+                    if isinstance(to_delete, Portal):
+                        if to_delete.opposite is not None:
+                            to_delete.opposite.opposite = None
+                            game.unresolved_portal = to_delete.opposite
                 game.world_tiles[world_x][world_y] = None
+
 
 """
 마우스 휠 핸들러
@@ -206,10 +246,11 @@ def on_mouse(window, button: int, action: int, mods: int):
 마우스 휠을 오른쪽으로 회전시킬 시, x 는 1 이 됨
 마우스 휠을 왼쪽으로 회전시킬 시, x 는 -1 이 됨
 """
+
+
 def on_mouse_wheel(window, x: float, y: float):
     if y > 0:
         global_infos.width += 0.5
     elif y < 0:
         if global_infos.width >= 1:
             global_infos.width -= 0.5
-

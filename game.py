@@ -1,6 +1,5 @@
 import numpy as np
 
-import game
 from global_variables import global_infos
 from texture import Texture
 import simpleaudio as sa
@@ -9,6 +8,9 @@ world_tiles = np.empty((32, 18), dtype=np.object)
 
 # 현재 마우스에 잡고 있는 타일
 holding = None
+
+# 가장 최근에 설치한 포탈 타일
+unresolved_portal = None
 
 """
 값을 min_value <= num <= max_value 사이로 만드는 함수
@@ -72,8 +74,8 @@ def tick():
 
     add_list = []
 
-    if game.global_infos.stage_tracker is not None:
-        game.global_infos.stage_tracker.ticked()
+    if global_infos.stage_tracker is not None:
+        global_infos.stage_tracker.ticked()
 
 
 def try_move(tile):
@@ -93,6 +95,12 @@ def play_wav(path: str):
 
 def clear_level():
     global_infos.ticking = False
+    global holding
+    global unresolved_portal
+
+    holding = None
+    unresolved_portal = None
+
     for x in range(0, 32):
         for y in range(0, 18):
             world_tiles[x][y] = None

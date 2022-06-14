@@ -78,13 +78,14 @@ class Arrow(Tile):
         move_result = game.try_move(self)
         if move_result is not None:
             move_result.when_pushed(self)
-            if isinstance(move_result, Pushable)\
-                    or isinstance(move_result, Directional)\
-                    or isinstance(move_result, Star)\
-                    or isinstance(move_result, Key):
+            if isinstance(move_result, Pushable) \
+                    or isinstance(move_result, Directional):
                 game.try_move(self)
             else:
-                self.pushing(move_result)
+                if not isinstance(move_result, Star) \
+                        and not isinstance(move_result, Key) \
+                        and not isinstance(move_result, Portal):
+                    self.pushing(move_result)
 
     def pushing(self, other):
         assert isinstance(other, Tile)
@@ -232,7 +233,8 @@ class Mine(Tile):
                 if existing is not None and isinstance(existing, Star):
                     if game.global_infos.stage_tracker is not None:
                         game.global_infos.stage_tracker.get_star()
-                game.add_list.append((corrected[0], corrected[1], Explosion(Texture.EXPLOSION)))
+                if existing is not None and not isinstance(existing, Portal):
+                    game.add_list.append((corrected[0], corrected[1], Explosion(Texture.EXPLOSION)))
         self.is_alive = False
 
     def serialize(self):
@@ -276,3 +278,30 @@ class Lock(Tile):
         else:
             fixed = "MOVABLE"
         return f"{position[0]} {position[1]} lock {fixed}"
+
+
+class Portal(Tile):
+    def __init__(self, texture: Texture):
+        super().__init__(texture)
+        self.opposite = None
+
+    def when_pushed(self, other):
+        velocity = other.velocity
+        opposite_position = self.opposite.get_position()
+        teleported_location = opposite_position[0] + velocity[0], opposite_position[1] + velocity[1]
+        other_position = other.get_position()
+        game.world_tiles[other_position[0]][other_position[1]] = None
+        game.world_tiles[teleported_location[0]][teleported_location[1]] = other
+
+    def serialize(self):
+        position = self.get_position()
+        if self.is_fixed:
+            fixed = "FIXED"
+        else:
+            fixed = "MOVABLE"
+        if self.texture == Texture.PORTAL_ORANGE:
+            texture = "orange"
+        else:
+            texture = "blue"
+        opposite_position = self.opposite.get_position()
+        return f"{position[0]} {position[1]} portal {fixed} {texture} {opposite_position[0]} {opposite_position[1]}"

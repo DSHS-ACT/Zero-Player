@@ -218,6 +218,10 @@ def show_placer():
     imgui.same_line()
     placer_entry(Texture.KEY, Key)
     placer_entry(Texture.LOCK, Lock)
+    imgui.same_line()
+    placer_entry(Texture.PORTAL_ORANGE, Portal)
+    imgui.same_line()
+    placer_entry(Texture.PORTAL_BLUE, Portal)
     imgui.end()
 
 def show_stage_picker():
