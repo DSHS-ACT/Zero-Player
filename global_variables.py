@@ -4,7 +4,7 @@ class Global:
         self.frame_count = 0
         self.game_speed = 1
         self.ticking = False
-        self.is_wrapping = False
+        self.is_wrapping = True
         self.show_debug_ui = False
         self.show_help = False
         self.show_placer = False
