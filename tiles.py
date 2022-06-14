@@ -344,3 +344,17 @@ class Duplicate(Tile):
         else:
             fixed = "MOVABLE"
         return f"{position[0]} {position[1]} duplicate {fixed}"
+
+
+class RotateRight(Tile):
+    def when_pushed(self, other):
+        if self.direction % 2 == 0:
+            pass
+
+    def serialize(self):
+        position = self.get_position()
+        if self.is_fixed:
+            fixed = "FIXED"
+        else:
+            fixed = "MOVABLE"
+        return f"{position[0]} {position[1]} rotate_right {self.direction} {fixed}"
