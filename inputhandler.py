@@ -234,6 +234,9 @@ def on_mouse(window, button: int, action: int, mods: int):
                         if to_delete.opposite is not None:
                             to_delete.opposite.opposite = None
                             game.unresolved_portal = to_delete.opposite
+                        else:
+                            assert to_delete.uuid == game.unresolved_portal.uuid
+                            game.unresolved_portal = None
                 game.world_tiles[world_x][world_y] = None
 
 

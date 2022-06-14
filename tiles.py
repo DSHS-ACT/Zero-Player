@@ -294,10 +294,15 @@ class Portal(Tile):
         self.opposite = None
 
     def when_pushed(self, other):
+        if isinstance(other, Portal):
+            return
         velocity = other.velocity
         opposite_position = self.opposite.get_position()
         teleported_location = game.correct_position((opposite_position[0] + velocity[0], opposite_position[1] + velocity[1]))
         if game.world_tiles[teleported_location[0]][teleported_location[1]] is not None:
+            self.velocity = velocity
+            game.world_tiles[teleported_location[0]][teleported_location[1]].when_pushed(self)
+            self.velocity = (0, 0)
             return
         other_position = other.get_position()
         game.world_tiles[other_position[0]][other_position[1]] = None
