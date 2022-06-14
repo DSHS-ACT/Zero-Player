@@ -75,6 +75,20 @@ def deserialize_to_world(world, file_path: str):
             else:
                 is_fixed = False
             tile.is_fixed = is_fixed
+        elif split[2] == "key":
+            tile = Key(Texture.KEY)
+            if split[3] == "FIXED":
+                is_fixed = True
+            else:
+                is_fixed = False
+            tile.is_fixed = is_fixed
+        elif split[2] == "lock":
+            tile = Lock(Texture.LOCK)
+            if split[3] == "FIXED":
+                is_fixed = True
+            else:
+                is_fixed = False
+            tile.is_fixed = is_fixed
         elif split[2] == "portal":
             if split[4] == "orange":
                 tile = Portal(Texture.PORTAL_ORANGE)
@@ -95,7 +109,13 @@ def deserialize_to_world(world, file_path: str):
                 tile.opposite = opposite
                 opposite.opposite = tile
                 portals_to_resolve.remove(opposite)
-
+        elif split[2] == "duplicate":
+            tile = Duplicate(Texture.DUPLICATE)
+            if split[3] == "FIXED":
+                is_fixed = True
+            else:
+                is_fixed = False
+            tile.is_fixed = is_fixed
         assert tile is not None
         world[x][y] = tile
     if len(portals_to_resolve) != 0:

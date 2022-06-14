@@ -82,7 +82,8 @@ def try_move(tile):
     position = tile.get_position()
     next_position = correct_position(tile.get_next())
 
-    if world_tiles[next_position[0]][next_position[1]] is not None:
+    existing = world_tiles[next_position[0]][next_position[1]]
+    if existing is not None:
         return world_tiles[next_position[0]][next_position[1]]
     world_tiles[position[0]][position[1]] = None
     world_tiles[next_position[0]][next_position[1]] = tile
@@ -92,6 +93,7 @@ def try_move(tile):
 def play_wav(path: str):
     player = sa.WaveObject.from_wave_file(path)
     player.play()
+
 
 def clear_level():
     global_infos.ticking = False

@@ -222,6 +222,7 @@ def show_placer():
     placer_entry(Texture.PORTAL_ORANGE, Portal)
     imgui.same_line()
     placer_entry(Texture.PORTAL_BLUE, Portal)
+    placer_entry(Texture.DUPLICATE, Duplicate)
     imgui.end()
 
 def show_stage_picker():

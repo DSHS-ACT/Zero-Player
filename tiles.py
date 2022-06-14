@@ -269,6 +269,14 @@ class Key(Tile):
                     current.is_alive = False
         self.is_alive = False
 
+    def serialize(self):
+        position = self.get_position()
+        if self.is_fixed:
+            fixed = "FIXED"
+        else:
+            fixed = "MOVABLE"
+        return f"{position[0]} {position[1]} key {fixed}"
+
 
 class Lock(Tile):
     def serialize(self):
@@ -288,7 +296,9 @@ class Portal(Tile):
     def when_pushed(self, other):
         velocity = other.velocity
         opposite_position = self.opposite.get_position()
-        teleported_location = opposite_position[0] + velocity[0], opposite_position[1] + velocity[1]
+        teleported_location = game.correct_position((opposite_position[0] + velocity[0], opposite_position[1] + velocity[1]))
+        if game.world_tiles[teleported_location[0]][teleported_location[1]] is not None:
+            return
         other_position = other.get_position()
         game.world_tiles[other_position[0]][other_position[1]] = None
         game.world_tiles[teleported_location[0]][teleported_location[1]] = other
@@ -305,3 +315,27 @@ class Portal(Tile):
             texture = "blue"
         opposite_position = self.opposite.get_position()
         return f"{position[0]} {position[1]} portal {fixed} {texture} {opposite_position[0]} {opposite_position[1]}"
+
+
+class Duplicate(Tile):
+    def when_pushed(self, other):
+        velocity = other.velocity
+        position = self.get_position()
+        copy_position = game.correct_position((position[0] + velocity[0], position[1] + velocity[1]))
+        if game.world_tiles[copy_position[0]][copy_position[1]] is not None:
+            self.velocity = velocity
+            game.world_tiles[copy_position[0]][copy_position[1]].when_pushed(self)
+            self.velocity = (0, 0)
+            return
+        from copy import deepcopy
+        copied = deepcopy(other)
+        copied.uuid = uuid.uuid4()
+        game.world_tiles[copy_position[0]][copy_position[1]] = copied
+
+    def serialize(self):
+        position = self.get_position()
+        if self.is_fixed:
+            fixed = "FIXED"
+        else:
+            fixed = "MOVABLE"
+        return f"{position[0]} {position[1]} duplicate {fixed}"
