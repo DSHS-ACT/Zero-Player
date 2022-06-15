@@ -5,7 +5,6 @@ import numpy as np
 from OpenGL.GL import *
 from imgui.integrations.glfw import GlfwRenderer
 
-import game
 import inputhandler
 import stage_tracker
 from index_buffer import IndexBuffer
@@ -140,7 +139,6 @@ def init_window():
         glfw.swap_buffers(window)
         glfw.poll_events()
 
-    data.serialize(game.world_tiles, str(uuid.uuid4()) + ".map")
     impl.shutdown()
     glfw.terminate()
 

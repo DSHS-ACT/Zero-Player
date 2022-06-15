@@ -314,6 +314,7 @@ class Portal(Tile):
         other_position = other.get_position()
         game.world_tiles[other_position[0]][other_position[1]] = None
         game.world_tiles[teleported_location[0]][teleported_location[1]] = other
+        game.play_wav("teleport.wav")
 
     def serialize(self):
         position = self.get_position()
