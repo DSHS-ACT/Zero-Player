@@ -3,6 +3,7 @@ import numpy as np
 from global_variables import global_infos
 from texture import Texture
 import simpleaudio as sa
+import threading
 
 world_tiles = np.empty((32, 18), dtype=np.object)
 
@@ -90,12 +91,16 @@ def try_move(tile):
     return None
 
 
-def play_wav(path: str):
+def play_wav_blocking(path: str):
     if not global_infos.play_sound:
         return
     player = sa.WaveObject.from_wave_file(path)
-    player.play()
+    player.play().wait_done()
 
+
+def play_wav(path: str):
+    thread = threading.Thread(target=play_wav_blocking, args=(path,), daemon=True)
+    thread.start()
 
 def clear_level():
     global_infos.ticking = False

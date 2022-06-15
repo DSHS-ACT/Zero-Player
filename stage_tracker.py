@@ -60,6 +60,9 @@ class Stage:
 
                     distance = abs(later_x - same_thing_position[0]) + abs(later_y - same_thing_position[1])
                     self.score -= distance
+            game.play_wav("clear.wav")
+        else:
+            game.play_wav("star.wav")
 
 
     def about_to_start(self, world):

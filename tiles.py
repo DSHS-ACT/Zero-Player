@@ -112,6 +112,7 @@ class Suicide(Tile):
     def when_pushed(self, other):
         other.is_alive = False
         self.is_alive = False
+        game.play_wav("self_destruct.wav")
 
     def serialize(self):
         position = self.get_position()
@@ -125,6 +126,7 @@ class Suicide(Tile):
 class Lava(Tile):
     def when_pushed(self, other):
         other.is_alive = False
+        game.play_wav("lava.wav")
 
     def serialize(self):
         position = self.get_position()
@@ -245,6 +247,7 @@ class Mine(Tile):
 
                 game.add_list.append((corrected[0], corrected[1], Explosion(Texture.EXPLOSION)))
         self.is_alive = False
+        game.play_wav("explosion.wav")
 
     def serialize(self):
         position = self.get_position()
@@ -268,12 +271,16 @@ class Explosion(Tile):
 
 class Key(Tile):
     def when_pushed(self, other):
+        opened = False
         for x in range(0, 32):
             for y in range(0, 18):
                 current = game.world_tiles[x][y]
                 if current is not None and isinstance(current, Lock):
                     current.is_alive = False
+                    opened = True
         self.is_alive = False
+        if opened:
+            game.play_wav("door.wav")
 
     def serialize(self):
         position = self.get_position()
@@ -408,6 +415,7 @@ class Rotate(Tile):
             other.direction %= 4
             game.world_tiles[other_position[0]][other_position[1]] = None
             game.world_tiles[rotate_next_position[0]][rotate_next_position[1]] = other
+            game.play_wav("rotate.wav")
 
     def serialize(self):
         position = self.get_position()
