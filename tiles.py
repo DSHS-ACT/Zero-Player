@@ -84,7 +84,9 @@ class Arrow(Tile):
             else:
                 if not isinstance(move_result, Star) \
                         and not isinstance(move_result, Key) \
-                        and not isinstance(move_result, Portal):
+                        and not isinstance(move_result, Portal) \
+                        and not isinstance(move_result, Duplicate) \
+                        and not isinstance(move_result, Rotate):
                     self.pushing(move_result)
 
     def pushing(self, other):
@@ -390,9 +392,9 @@ class Rotate(Tile):
                 return
         else:
             if is_right:
-                other.direction -= 1
-            else:
                 other.direction += 1
+            else:
+                other.direction -= 1
             other.direction %= 4
             game.world_tiles[other_position[0]][other_position[1]] = None
             game.world_tiles[rotate_next_position[0]][rotate_next_position[1]] = other
