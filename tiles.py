@@ -233,8 +233,10 @@ class Mine(Tile):
                 if existing is not None and isinstance(existing, Star):
                     if game.global_infos.stage_tracker is not None:
                         game.global_infos.stage_tracker.get_star()
-                if existing is not None and not isinstance(existing, Portal):
-                    game.add_list.append((corrected[0], corrected[1], Explosion(Texture.EXPLOSION)))
+                if existing is not None and isinstance(existing, Portal):
+                    continue
+
+                game.add_list.append((corrected[0], corrected[1], Explosion(Texture.EXPLOSION)))
         self.is_alive = False
 
     def serialize(self):
