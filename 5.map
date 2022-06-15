@@ -1,0 +1,78 @@
+0 0 wall FIXED
+0 2 wall FIXED
+1 0 wall FIXED
+1 1 portal FIXED blue 14 2
+1 2 wall FIXED
+2 0 wall FIXED
+2 1 wall FIXED
+2 2 wall FIXED
+5 7 wall FIXED
+5 8 wall FIXED
+5 9 wall FIXED
+5 10 wall FIXED
+6 6 wall FIXED
+6 7 arrow 2 FIXED
+6 9 lock FIXED
+6 11 rotate 1 FIXED
+6 12 wall FIXED
+7 7 wall FIXED
+7 8 wall FIXED
+7 9 wall FIXED
+7 10 wall FIXED
+7 11 wall FIXED
+7 12 wall FIXED
+7 13 wall FIXED
+8 10 wall FIXED
+8 11 star FIXED
+8 12 star FIXED
+8 13 wall FIXED
+9 10 wall FIXED
+9 11 mine FIXED
+9 12 wall FIXED
+10 10 wall FIXED
+10 12 wall FIXED
+11 5 star FIXED
+11 6 suicide FIXED
+11 10 wall FIXED
+11 12 wall FIXED
+12 10 wall FIXED
+12 11 mine FIXED
+12 12 wall FIXED
+13 1 wall FIXED
+13 2 wall FIXED
+13 3 wall FIXED
+13 10 wall FIXED
+13 12 wall FIXED
+14 1 wall FIXED
+14 2 portal FIXED orange 1 1
+14 3 wall FIXED
+14 10 wall FIXED
+14 12 wall FIXED
+15 0 lava FIXED
+15 2 directional 0 FIXED
+15 10 wall FIXED
+15 11 mine FIXED
+15 12 wall FIXED
+16 1 wall FIXED
+16 3 wall FIXED
+16 10 wall FIXED
+16 12 wall FIXED
+17 1 wall FIXED
+17 2 arrow 3 FIXED
+17 3 wall FIXED
+17 11 lock FIXED
+18 1 wall FIXED
+18 2 wall FIXED
+18 3 wall FIXED
+25 13 pushable MOVABLE
+26 13 arrow 0 MOVABLE
+27 13 arrow 0 MOVABLE
+28 13 rotate 1 MOVABLE
+29 13 rotate 3 MOVABLE
+30 0 wall FIXED
+30 1 wall FIXED
+30 2 wall FIXED
+30 13 duplicate MOVABLE
+31 0 wall FIXED
+31 1 key FIXED
+31 2 wall FIXED
