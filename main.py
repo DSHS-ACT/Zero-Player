@@ -45,6 +45,8 @@ def init_window():
     glfw.set_mouse_button_callback(window, inputhandler.on_mouse)
     glfw.set_scroll_callback(window, inputhandler.on_mouse_wheel)
 
+    global_infos.final_map_number = get_last_level()
+
     positions = np.array([
         -1.0, -1.0, 0.0, 0.0,
         1.0, -1.0, 1.0, 0.0,
@@ -138,6 +140,7 @@ def init_window():
         glfw.swap_buffers(window)
         glfw.poll_events()
 
+    data.serialize(game.world_tiles, str(uuid.uuid4()) + ".map")
     impl.shutdown()
     glfw.terminate()
 
@@ -248,6 +251,11 @@ def show_placer():
         game.clear_level()
     imgui.end()
 
+def get_last_level():
+    i = 0
+    while os.path.isfile(f"{i + 1}.map"):
+        i += 1
+    return i
 def show_stage_picker():
     if global_infos.stage_tracker is None:
         dev_mode_text = "개발 모드 활성화됨"

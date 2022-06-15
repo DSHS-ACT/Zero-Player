@@ -1,94 +1,84 @@
-2 9 arrow 1 FIXED
-4 5 arrow 1 FIXED
-8 0 lava FIXED
-8 1 lava FIXED
-8 2 lava FIXED
-8 3 lava FIXED
-8 4 lava FIXED
-8 5 lava FIXED
-8 6 lava FIXED
-8 7 lava FIXED
-8 8 lava FIXED
-8 9 lock FIXED
-8 10 lava FIXED
-8 11 lava FIXED
-8 12 lava FIXED
-8 13 lava FIXED
-8 14 lava FIXED
-8 15 lava FIXED
-8 16 lava FIXED
-8 17 lava FIXED
-11 12 key FIXED
-12 5 star FIXED
-12 7 mine FIXED
-12 16 arrow 0 FIXED
-13 9 star FIXED
-14 12 star FIXED
+0 5 wall FIXED
+1 5 arrow 1 FIXED
+3 3 pushable MOVABLE
+3 4 wall FIXED
+3 6 wall FIXED
+3 7 wall FIXED
+4 4 wall FIXED
+4 5 suicide FIXED
+4 6 wall FIXED
+4 7 wall FIXED
+5 4 wall FIXED
+5 5 star FIXED
+5 6 wall FIXED
+5 7 wall FIXED
+5 8 wall FIXED
+5 9 wall FIXED
+6 3 wall FIXED
+6 5 lava FIXED
+6 10 wall FIXED
+7 3 wall FIXED
+7 6 star FIXED
+7 10 wall FIXED
+8 3 wall FIXED
+8 5 mine FIXED
+8 6 star FIXED
+8 10 wall FIXED
+9 3 wall FIXED
+9 6 star FIXED
+9 10 wall FIXED
+10 3 wall FIXED
+10 10 wall FIXED
+11 4 wall FIXED
+11 5 suicide FIXED
+11 6 wall FIXED
+11 7 wall FIXED
+11 8 wall FIXED
+11 9 wall FIXED
+12 6 pushable MOVABLE
+12 8 pushable MOVABLE
 15 0 wall FIXED
-15 1 wall FIXED
-15 2 wall FIXED
-15 3 wall FIXED
-15 4 wall FIXED
-15 5 wall FIXED
-15 6 wall FIXED
-15 7 wall FIXED
-15 8 wall FIXED
-15 9 wall FIXED
-15 10 wall FIXED
-15 11 wall FIXED
-15 12 wall FIXED
-15 13 wall FIXED
-15 14 wall FIXED
-15 15 wall FIXED
-15 16 wall FIXED
-15 17 wall FIXED
-16 0 portal MOVABLE orange 18 1
-16 1 pushable MOVABLE
-16 2 pushable MOVABLE
-16 3 wall FIXED
-17 0 arrow 0 MOVABLE
-17 1 star FIXED
-17 2 arrow 0 MOVABLE
-17 3 wall FIXED
-17 11 rotate 1 FIXED
-17 13 star FIXED
-18 0 pushable MOVABLE
-18 1 portal MOVABLE blue 16 0
-18 2 pushable MOVABLE
-18 3 wall FIXED
-19 0 wall FIXED
-19 1 wall FIXED
-19 2 wall FIXED
-19 3 wall FIXED
-19 8 key FIXED
-20 0 suicide FIXED
-20 1 suicide FIXED
-20 2 suicide FIXED
-20 8 suicide FIXED
-21 0 suicide FIXED
-21 1 star FIXED
-21 2 suicide FIXED
-21 11 rotate 1 FIXED
-22 0 suicide FIXED
-22 1 suicide FIXED
-22 2 suicide FIXED
-22 8 arrow 3 FIXED
-23 0 lava FIXED
-23 1 lava FIXED
-23 2 lava FIXED
-23 3 lava FIXED
-23 4 lava FIXED
-23 5 lava FIXED
-23 6 directional 0 FIXED
-23 7 lava FIXED
-23 8 lock FIXED
-23 9 wall MOVABLE
-23 10 wall MOVABLE
-23 11 directional 0 FIXED
-23 12 directional 0 FIXED
-23 13 lava FIXED
-23 14 lava FIXED
-23 15 lava FIXED
-23 16 lava FIXED
-23 17 lava FIXED
-30 8 star FIXED
+15 2 arrow 2 FIXED
+15 3 pushable FIXED
+15 5 star FIXED
+15 9 mine FIXED
+15 10 mine FIXED
+15 11 mine FIXED
+15 12 mine FIXED
+15 13 star FIXED
+18 5 arrow 3 FIXED
+18 6 pushable MOVABLE
+18 8 pushable MOVABLE
+19 3 pushable MOVABLE
+19 4 wall FIXED
+19 6 wall FIXED
+19 7 wall FIXED
+19 8 wall FIXED
+19 9 wall FIXED
+20 3 wall FIXED
+20 10 wall FIXED
+21 3 wall FIXED
+21 5 lava MOVABLE
+21 10 wall FIXED
+22 3 wall FIXED
+22 5 mine FIXED
+22 6 star FIXED
+22 10 wall FIXED
+23 3 wall FIXED
+23 10 wall FIXED
+24 3 wall FIXED
+24 10 wall FIXED
+25 4 wall FIXED
+25 5 suicide FIXED
+25 6 wall FIXED
+25 7 wall FIXED
+25 8 wall FIXED
+25 9 wall FIXED
+26 4 wall FIXED
+26 6 wall FIXED
+26 7 wall FIXED
+27 4 wall FIXED
+27 6 wall FIXED
+27 7 wall FIXED
+30 5 arrow 3 FIXED
+31 5 wall FIXED

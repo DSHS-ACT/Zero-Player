@@ -245,6 +245,8 @@ def on_mouse(window, button: int, action: int, mods: int):
                         game.holding.is_fixed = global_infos.is_holding_fixed
                         game.world_tiles[world_x][world_y] = None
         else:
+            if global_infos.stage_tracker is not None:
+                return
             if game.holding is None:
                 to_delete = game.world_tiles[world_x][world_y]
                 if to_delete is not None:

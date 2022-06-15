@@ -83,8 +83,6 @@ class Arrow(Tile):
             if isinstance(move_result, Directional):
                 if move_result.direction % 2 == self.direction % 2:
                     game.try_move(self)
-                else:
-                    self.pushing(move_result)
             if not isinstance(move_result, Arrow) \
                     and not isinstance(move_result, Pushable) \
                     and not isinstance(move_result, Directional) \
@@ -391,8 +389,15 @@ class Rotate(Tile):
         if existing is not None:
             if not (isinstance(existing, Rotate) or isinstance(existing, Portal)):
                 self.velocity = velocity
+                actual_direction = self.direction
+                if is_right:
+                    self.direction = other.direction + 1
+                else:
+                    self.direction = other.direction - 1
+                self.direction %= 4
                 existing.when_pushed(self)
                 self.velocity = (0, 0)
+                self.direction = actual_direction
                 return
         else:
             if is_right:

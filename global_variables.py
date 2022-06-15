@@ -14,7 +14,7 @@ class Global:
         self.imgui_io = None
         self.window = -1
         self.play_sound = True
-        self.final_map_number = 5
+        self.final_map_number = 0
 
 
 global_infos = Global()

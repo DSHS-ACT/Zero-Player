@@ -8,7 +8,6 @@ class Texture:
     # 현재 게임에서 사용하는 텍스쳐들
     EMPTY = None
     ARROW = None
-    QUESTION = None
     SUICIDE = None
     LAVA = None
     WALL = None
@@ -66,24 +65,23 @@ class Texture:
     @staticmethod
     def create_textures():
         Texture.EMPTY = Texture("empty.png")
-        Texture.ARROW = Texture("1.png")
-        Texture.QUESTION = Texture("2.png")
-        Texture.SUICIDE = Texture("5.png")
-        Texture.LAVA = Texture("6.png")
-        Texture.WALL = Texture("7.png")
-        Texture.PUSHABLE = Texture("pushable.png")
+        Texture.ARROW = Texture("arrow.png")
+        Texture.SUICIDE = Texture("self_destruction.png")
+        Texture.LAVA = Texture("lava.png")
+        Texture.WALL = Texture("wall.png")
+        Texture.PUSHABLE = Texture("chest.png")
         Texture.DIRECTIONAL = Texture("directional.png")
         Texture.STAR = Texture("star.png")
         Texture.MINE = Texture("mine.png")
         Texture.EXPLOSION = Texture("explosion.png")
         Texture.KEY = Texture("key.png")
-        Texture.LOCK = Texture("lock.png")
+        Texture.LOCK = Texture("door.png")
         Texture.PORTAL_ORANGE = Texture("portal_orange.png")
         Texture.PORTAL_BLUE = Texture("portal_blue.png")
         Texture.DUPLICATE = Texture("duplicate.png")
         Texture.ROTATE_LEFT = Texture("rotate_left.png")
         Texture.ROTATE_RIGHT = Texture("rotate_right.png")
-        Texture.TEXTURE_LIST = [Texture.EMPTY, Texture.ARROW, Texture.QUESTION, Texture.SUICIDE, Texture.LAVA,
+        Texture.TEXTURE_LIST = [Texture.EMPTY, Texture.ARROW, Texture.SUICIDE, Texture.LAVA,
                                 Texture.WALL, Texture.PUSHABLE, Texture.DIRECTIONAL, Texture.STAR, Texture.MINE,
                                 Texture.EXPLOSION, Texture.KEY, Texture.LOCK, Texture.PORTAL_ORANGE,
                                 Texture.PORTAL_BLUE, Texture.DUPLICATE, Texture.ROTATE_LEFT, Texture.ROTATE_RIGHT]
