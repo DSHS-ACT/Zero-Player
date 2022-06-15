@@ -405,4 +405,4 @@ class Rotate(Tile):
             fixed = "FIXED"
         else:
             fixed = "MOVABLE"
-        return f"{position[0]} {position[1]} rotate_right {fixed}"
+        return f"{position[0]} {position[1]} rotate {self.direction} {fixed}"

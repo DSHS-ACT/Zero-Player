@@ -1,3 +1,4 @@
+import enums
 import tiles
 from tiles import *
 from os.path import exists
@@ -116,6 +117,21 @@ def deserialize_to_world(world, file_path: str):
             else:
                 is_fixed = False
             tile.is_fixed = is_fixed
+        elif split[2] == "rotate":
+            direction = int(split[3])
+            if direction == enums.RIGHT:
+                tile = Rotate(Texture.ROTATE_RIGHT)
+                tile.direction = enums.RIGHT
+            else:
+                tile = Rotate(Texture.ROTATE_LEFT)
+                tile.direction = enums.LEFT
+
+            if split[4] == "FIXED":
+                is_fixed = True
+            else:
+                is_fixed = False
+            tile.is_fixed = is_fixed
+
         assert tile is not None
         world[x][y] = tile
     if len(portals_to_resolve) != 0:
