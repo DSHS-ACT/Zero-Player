@@ -12,6 +12,7 @@ class Global:
         self.stage_tracker = None
         self.show_stage_picker = False
         self.imgui_io = None
+        self.window = -1
 
 
 global_infos = Global()

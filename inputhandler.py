@@ -4,9 +4,11 @@ import glfw
 
 import enums
 import game
+import tiles
 from global_variables import global_infos
 import data
 from tiles import Portal
+from texture import Texture
 
 """
 ZPG의 키보드 핸들러
@@ -20,10 +22,24 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
     if not is_press:
         return
 
-    allowed_speeds = [0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0, 10.0, 12.0, 15.0, 20.0, 30.0]
+    allowed_speeds = [0.5, 1.0, 1.5, 2.0, 3.0, 4.0, 6.0, 10.0, 12.0, 15.0, 20.0, 30.0, 60.0]
     is_ctrl_pressed = glfw.get_key(window, glfw.KEY_LEFT_CONTROL)
     is_alt_pressed = glfw.get_key(window, glfw.KEY_LEFT_ALT)
     if key == glfw.KEY_ESCAPE:
+        if global_infos.show_help:
+            global_infos.show_help = False
+            return
+        if global_infos.show_placer:
+            global_infos.show_placer = False
+            return
+        if global_infos.show_debug_ui:
+            global_infos.show_debug_ui = False
+            return
+        if global_infos.show_stage_picker:
+            global_infos.show_stage_picker = False
+            return
+        if global_infos.stage_tracker is not None and global_infos.stage_tracker.cleared:
+            return
         glfw.set_window_should_close(window, True)
 
     if key == glfw.KEY_L:
@@ -80,8 +96,6 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
 
         if key == glfw.KEY_P:
             game.play_wav("menu.wav")
-            global_infos.show_help = False
-            global_infos.show_debug_ui = False
             if not global_infos.ticking:
                 global_infos.show_placer = not global_infos.show_placer
 
@@ -156,19 +170,23 @@ def on_key(window, key: int, scancode: int, action: int, mods: int):
                 data.deserialize_to_world(game.world_tiles, "0.map")
 
         if key == glfw.KEY_UP:
-            if game.holding is not None:
+            if game.holding is not None and not isinstance(game.holding, tiles.Rotate):
                 game.holding.direction = enums.UP
 
         if key == glfw.KEY_RIGHT:
             if game.holding is not None:
+                if isinstance(game.holding, tiles.Rotate):
+                    game.holding.texture = Texture.ROTATE_RIGHT
                 game.holding.direction = enums.RIGHT
 
         if key == glfw.KEY_DOWN:
-            if game.holding is not None:
+            if game.holding is not None and not isinstance(game.holding, tiles.Rotate):
                 game.holding.direction = enums.DOWN
 
         if key == glfw.KEY_LEFT:
             if game.holding is not None:
+                if isinstance(game.holding, tiles.Rotate):
+                    game.holding.texture = Texture.ROTATE_LEFT
                 game.holding.direction = enums.LEFT
 
 

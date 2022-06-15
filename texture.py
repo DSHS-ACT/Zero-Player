@@ -22,6 +22,7 @@ class Texture:
     PORTAL_ORANGE = None
     PORTAL_BLUE = None
     DUPLICATE = None
+    ROTATE_LEFT = None
     ROTATE_RIGHT = None
 
     # 현재 게임에서 사용하는 텍스쳐들이 들어있는 리스트, create_texture 정적 함수가 호출되면 초기화된다

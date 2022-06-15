@@ -1,6 +1,7 @@
 from tiles import Star
 from global_variables import global_infos
 from copy import deepcopy
+import glfw
 
 
 class StageBase:
@@ -69,6 +70,9 @@ class StageBase:
         if self.next_stage is not None:
             if imgui.button("다음 스테이지 불러오기"):
                 global_infos.stage_tracker = self.next_stage()
+            imgui.same_line()
+        if imgui.button("게임 종료"):
+            glfw.set_window_should_close(global_infos.window, True)
         imgui.end()
 
 

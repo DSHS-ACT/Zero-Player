@@ -299,9 +299,10 @@ class Portal(Tile):
         velocity = other.velocity
         opposite_position = self.opposite.get_position()
         teleported_location = game.correct_position((opposite_position[0] + velocity[0], opposite_position[1] + velocity[1]))
-        if game.world_tiles[teleported_location[0]][teleported_location[1]] is not None:
+        existing = game.world_tiles[teleported_location[0]][teleported_location[1]]
+        if existing is not None and existing != self:
             self.velocity = velocity
-            game.world_tiles[teleported_location[0]][teleported_location[1]].when_pushed(self)
+            existing.when_pushed(self)
             self.velocity = (0, 0)
             return
         other_position = other.get_position()
@@ -346,10 +347,53 @@ class Duplicate(Tile):
         return f"{position[0]} {position[1]} duplicate {fixed}"
 
 
-class RotateRight(Tile):
+class Rotate(Tile):
+    def __init__(self, texture: Texture):
+        super().__init__(texture)
+        self.direction = enums.RIGHT
+
     def when_pushed(self, other):
-        if self.direction % 2 == 0:
-            pass
+        is_right = self.direction == enums.RIGHT
+        velocity = other.velocity
+        if velocity == (1, 0):
+            if is_right:
+                velocity = (0, 1)
+            else:
+                velocity = (0, -1)
+        elif velocity == (0, 1):
+            if is_right:
+                velocity = (-1, 0)
+            else:
+                velocity = (1, 0)
+        elif velocity == (-1, 0):
+            if is_right:
+                velocity = (0, -1)
+            else:
+                velocity = (0, 1)
+        elif velocity == (0, -1):
+            if is_right:
+                velocity = (1, 0)
+            else:
+                velocity = (-1, 0)
+
+        position = self.get_position()
+        other_position = other.get_position()
+        rotate_next_position = game.correct_position((position[0] + velocity[0], position[1] + velocity[1]))
+        existing = game.world_tiles[rotate_next_position[0]][rotate_next_position[1]]
+        if existing is not None:
+            if not (isinstance(existing, Rotate) or isinstance(existing, Portal)):
+                self.velocity = velocity
+                existing.when_pushed(self)
+                self.velocity = (0, 0)
+                return
+        else:
+            if is_right:
+                other.direction -= 1
+            else:
+                other.direction += 1
+            other.direction %= 4
+            game.world_tiles[other_position[0]][other_position[1]] = None
+            game.world_tiles[rotate_next_position[0]][rotate_next_position[1]] = other
 
     def serialize(self):
         position = self.get_position()
@@ -357,4 +401,4 @@ class RotateRight(Tile):
             fixed = "FIXED"
         else:
             fixed = "MOVABLE"
-        return f"{position[0]} {position[1]} rotate_right {self.direction} {fixed}"
+        return f"{position[0]} {position[1]} rotate_right {fixed}"

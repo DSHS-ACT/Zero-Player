@@ -40,6 +40,7 @@ def init_window():
         glfw.terminate()
         return
 
+    global_infos.window = window
     glfw.make_context_current(window)
     glfw.set_key_callback(window, inputhandler.on_key)
     glfw.set_mouse_button_callback(window, inputhandler.on_mouse)
@@ -223,6 +224,19 @@ def show_placer():
     imgui.same_line()
     placer_entry(Texture.PORTAL_BLUE, Portal)
     placer_entry(Texture.DUPLICATE, Duplicate)
+    imgui.same_line()
+    if imgui.image_button(Texture.ROTATE_RIGHT.id, 120, 120, (0, 1), (1, 0)):
+        rotate = Rotate(Texture.ROTATE_RIGHT)
+
+        direction = enums.RIGHT
+        if glfw.PRESS == glfw.get_key(window, glfw.KEY_RIGHT):
+            direction = enums.RIGHT
+        elif glfw.PRESS == glfw.get_key(window, glfw.KEY_LEFT):
+            direction = enums.LEFT
+
+        rotate.direction = direction
+        game.holding = rotate
+        rotate.is_fixed = global_infos.is_holding_fixed
     imgui.end()
 
 def show_stage_picker():
