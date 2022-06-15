@@ -13,6 +13,7 @@ class Global:
         self.show_stage_picker = False
         self.imgui_io = None
         self.window = -1
+        self.play_sound = True
 
 
 global_infos = Global()

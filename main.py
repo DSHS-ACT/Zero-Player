@@ -158,7 +158,6 @@ def show_help():
     imgui.text("게임 속도 가속: L")
     imgui.text("엔티티 배치 메뉴: P")
     imgui.text("시뮬레이션 시작: SPACE")
-    imgui.text("개발자 모드 활성화/비활성화: D")
     imgui.text("스테이지 불러오기 메뉴: S")
     imgui.end()
 
@@ -171,9 +170,18 @@ def debug_screen():
     else:
         imgui.text("월드 테두리 이어 붙이지 않음")
 
+    if global_infos.play_sound:
+        sound_text = "소리 활성화됨"
+    else:
+        sound_text = "소리 비활성화됨"
+
+    if imgui.button(sound_text):
+        global_infos.play_sound = not global_infos.play_sound
+
     imgui.image(1, 60, 60, (0, 1), (1, 0))
     for texture in Texture.TEXTURE_LIST:
         imgui.image(texture.id, 60, 60, (0, 1), (1, 0))
+
 
     imgui.end()
 

@@ -91,6 +91,8 @@ def try_move(tile):
 
 
 def play_wav(path: str):
+    if not global_infos.play_sound:
+        return
     player = sa.WaveObject.from_wave_file(path)
     player.play()
 
