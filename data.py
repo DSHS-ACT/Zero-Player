@@ -1,4 +1,3 @@
-import enums
 import tiles
 from tiles import *
 from os.path import exists

@@ -78,16 +78,23 @@ class Arrow(Tile):
         move_result = game.try_move(self)
         if move_result is not None:
             move_result.when_pushed(self)
-            if isinstance(move_result, Pushable) \
-                    or isinstance(move_result, Directional):
+            if isinstance(move_result, Pushable):
                 game.try_move(self)
-            else:
-                if not isinstance(move_result, Star) \
-                        and not isinstance(move_result, Key) \
-                        and not isinstance(move_result, Portal) \
-                        and not isinstance(move_result, Duplicate) \
-                        and not isinstance(move_result, Rotate):
+            if isinstance(move_result, Directional):
+                if move_result.direction % 2 == self.direction % 2:
+                    game.try_move(self)
+                else:
                     self.pushing(move_result)
+            if not isinstance(move_result, Arrow) \
+                    and not isinstance(move_result, Pushable) \
+                    and not isinstance(move_result, Directional) \
+                    and not isinstance(move_result, Star) \
+                    and not isinstance(move_result, Key) \
+                    and not isinstance(move_result, Explosion) \
+                    and not isinstance(move_result, Portal) \
+                    and not isinstance(move_result, Duplicate) \
+                    and not isinstance(move_result, Rotate):
+                self.pushing(move_result)
 
     def pushing(self, other):
         assert isinstance(other, Tile)
@@ -259,9 +266,6 @@ class Explosion(Tile):
         if self.life <= 0:
             self.is_alive = False
         self.life -= 1
-
-    def when_pushed(self, other):
-        other.is_alive = False
 
 
 class Key(Tile):

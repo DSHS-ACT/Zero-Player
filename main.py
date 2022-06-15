@@ -1,18 +1,17 @@
 import os
 
-import glfw
 import imgui
 import numpy as np
 from OpenGL.GL import *
 from imgui.integrations.glfw import GlfwRenderer
 
-import data
+import game
 import inputhandler
-from global_variables import global_infos
+import stage_tracker
 from index_buffer import IndexBuffer
 from renderer import Renderer
 from shader import Shader
-from stage_tracker import Stage1
+from stage_tracker import *
 from tiles import *
 from vertex_array import VertexArray
 from vertex_buffer import VertexBuffer
@@ -245,6 +244,8 @@ def show_placer():
         rotate.direction = direction
         game.holding = rotate
         rotate.is_fixed = global_infos.is_holding_fixed
+    if imgui.button("레벨 청소하기"):
+        game.clear_level()
     imgui.end()
 
 def show_stage_picker():
@@ -255,26 +256,22 @@ def show_stage_picker():
     if imgui.button(dev_mode_text):
         global_infos.stage_tracker = None
 
-    if imgui.button("스테이지 1"):
-        close_all()
-        game.clear_level()
-        data.deserialize_to_world(game.world_tiles, "1.map")
-        global_infos.stage_tracker = Stage1(game.world_tiles)
+    for i in range(1, global_infos.final_map_number + 1):
+        stage_entry(i)
 
     imgui.same_line()
 
-def close_all():
-    global_infos.show_placer = False
-    game.holding = None
-    global_infos.show_help = False
-    global_infos.show_stage_picker = False
-    global_infos.show_debug_ui = False
 
 def placer_entry(texture, tile_class):
     if imgui.image_button(texture.id, 120, 120, (0, 1), (1, 0)):
         tile = tile_class(texture)
         game.holding = tile
         tile.is_fixed = global_infos.is_holding_fixed
+
+
+def stage_entry(map_number: int):
+    if imgui.button(f"스테이지 {map_number}"):
+        stage_tracker.load_stage(map_number)
 
 def main():
     print("PID:", os.getpid())

@@ -2,17 +2,18 @@ from tiles import Star
 from global_variables import global_infos
 from copy import deepcopy
 import glfw
+import game
+import data
 
 
-class StageBase:
-    def __init__(self, name: str, world, next_stage):
-        self.name = name
+class Stage:
+    def __init__(self, world, map_number: int):
+        self.number = map_number
         self.original = deepcopy(world)
         self.snapshot_before_ticking = None
         self.stars = 0
         self.cleared = False
         self.score = 200
-        self.next_stage = next_stage
         self.tick_count = 0
         for x in range(0, 32):
             for y in range(0, 18):
@@ -65,17 +66,31 @@ class StageBase:
         self.snapshot_before_ticking = deepcopy(world)
 
     def display_cleared_gui(self, imgui):
-        imgui.begin(f"스테이지 {self.name} 클리어!")
+        imgui.begin(f"스테이지 {self.number} 클리어!")
         imgui.text(f"점수: {self.score}")
-        if self.next_stage is not None:
+        if self.number < global_infos.final_map_number:
             if imgui.button("다음 스테이지 불러오기"):
-                global_infos.stage_tracker = self.next_stage()
+                load_stage(self.number + 1)
             imgui.same_line()
         if imgui.button("게임 종료"):
             glfw.set_window_should_close(global_infos.window, True)
         imgui.end()
 
 
-class Stage1(StageBase):
-    def __init__(self, world):
-        super().__init__("스테이지 1", world, None)
+def load_stage(map_number: int):
+    close_all()
+    game.clear_level()
+    data.deserialize_to_world(game.world_tiles, f"{map_number}.map")
+    global_infos.stage_tracker = Stage(game.world_tiles, map_number)
+    global_infos.is_holding_fixed = False
+
+
+def close_all():
+    global_infos.show_placer = False
+    game.holding = None
+    global_infos.show_help = False
+    global_infos.show_stage_picker = False
+    global_infos.show_debug_ui = False
+
+
+

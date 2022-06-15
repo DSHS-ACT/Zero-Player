@@ -1,0 +1,48 @@
+6 4 wall FIXED
+7 3 wall FIXED
+7 4 key FIXED
+7 5 directional 1 FIXED
+8 4 wall FIXED
+8 9 wall FIXED
+8 14 arrow 1 MOVABLE
+9 4 wall FIXED
+9 5 wall FIXED
+9 8 wall FIXED
+9 9 portal FIXED orange 10 6
+9 10 directional 1 FIXED
+9 14 arrow 0 MOVABLE
+10 3 wall FIXED
+10 4 mine FIXED
+10 6 portal FIXED blue 9 9
+10 9 wall FIXED
+10 14 arrow 0 MOVABLE
+11 4 wall FIXED
+11 5 wall FIXED
+11 14 arrow 0 MOVABLE
+12 5 wall FIXED
+15 5 arrow 1 FIXED
+15 13 wall FIXED
+16 5 wall FIXED
+16 12 wall FIXED
+16 13 arrow 1 FIXED
+16 14 wall FIXED
+17 4 wall FIXED
+17 5 star FIXED
+17 6 wall FIXED
+17 7 wall FIXED
+17 12 wall FIXED
+17 13 directional 1 FIXED
+17 14 wall FIXED
+18 4 wall FIXED
+18 5 mine FIXED
+18 7 portal FIXED orange 18 12
+18 8 wall FIXED
+18 11 wall FIXED
+18 12 portal FIXED blue 18 7
+18 13 directional 1 FIXED
+19 5 wall FIXED
+19 6 wall FIXED
+19 7 wall FIXED
+19 12 wall FIXED
+19 13 lock FIXED
+19 14 wall FIXED
