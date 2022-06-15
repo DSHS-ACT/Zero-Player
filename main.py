@@ -278,7 +278,11 @@ def placer_entry(texture, tile_class):
 
 
 def stage_entry(map_number: int):
-    if imgui.button(f"스테이지 {map_number}"):
+    if map_number == 10:
+        text = "최종 스테이지 10"
+    else:
+        text = f"스테이지 {map_number}"
+    if imgui.button(text):
         stage_tracker.load_stage(map_number)
 
 def main():
