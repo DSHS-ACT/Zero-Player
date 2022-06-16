@@ -89,7 +89,7 @@ void draw_texture(int slot, vec2 coordinate, bool is_fixed) {
     if (slot == 31) color = texture(tiles[31], coordinate);
 
     if (is_fixed) {
-        color = color * 0.4;
+        color = color * 0.6;
     }
 }
 
