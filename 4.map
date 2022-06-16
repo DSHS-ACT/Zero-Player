@@ -34,6 +34,7 @@
 17 14 wall FIXED
 18 4 wall FIXED
 18 5 mine FIXED
+18 6 directional 0 FIXED
 18 7 portal FIXED orange 18 12
 18 8 wall FIXED
 18 11 wall FIXED
