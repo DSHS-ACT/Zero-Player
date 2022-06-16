@@ -4,7 +4,5 @@ ports:
   - port: 6080
     visibility: 'public'
 tasks:
-  - init: |
-      python3 -m pip install -r requirements.txt
-command: |
-      echo 'TODO: start app'
+  - name: 'install dependencies'
+    init: python3 -m pip install -r requirements.txt
