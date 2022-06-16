@@ -1,0 +1,11 @@
+image:
+  file: .gitpod.dockerfile
+ports:
+  - port: 6080
+    protocol: "http"
+tasks:
+  - init: |
+      echo 'TODO: build project'
+      python3 -m pip install -r requirements.txt
+command: |
+      echo 'TODO: start app'
