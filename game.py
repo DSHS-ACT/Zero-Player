@@ -5,7 +5,7 @@ from texture import Texture
 import simpleaudio as sa
 import threading
 
-world_tiles = np.empty((32, 18), dtype=np.object)
+world_tiles = np.empty((32, 18), dtype=np.object_)
 
 # 현재 마우스에 잡고 있는 타일
 holding = None
