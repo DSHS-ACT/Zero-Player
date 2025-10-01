@@ -72,7 +72,7 @@ def init_window():
     global_infos.imgui_io = imgui.get_io()
 
     global_infos.imgui_io.display_size = 100, 100
-    nanum_font = global_infos.imgui_io.fonts.add_font_from_file_ttf("NanumSquareRoundR.ttf", 17,
+    nanum_font = global_infos.imgui_io.fonts.add_font_from_file_ttf("NanumSquareRoundR.ttf", 17, None,
                                                        global_infos.imgui_io.fonts.get_glyph_ranges_korean())
     global_infos.imgui_io.fonts.get_tex_data_as_rgba32()
 
